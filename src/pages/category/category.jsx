@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Button} from 'antd'
+import {Button,Table} from 'antd'
 
  class Category extends Component {
     render() {
