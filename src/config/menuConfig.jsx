@@ -6,17 +6,17 @@ export  const  menuList = [
         key:'/home'
     },
     {
-        title:'商品',
+        title:'订单',
         icon:'AppstoreOutlined',
         key:'/product',
         children:[
             {
-                title:'品类管理',
+                title:'订单管理',
                 icon:'BarsOutlined',
                 key:'/category'
             },
             {
-                title:'商品管理',
+                title:'服务申请',
                 icon:'ToolOutlined',
                 key:'/product'
             }
