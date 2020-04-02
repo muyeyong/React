@@ -1,55 +1,77 @@
 import React, { Component } from 'react';
-import {Button,Table,Card} from 'antd';
+import {Button,Table,Card,message} from 'antd';
 import LinkButton from '../../components/link-button';
+import {reqCategorys} from '../../api/index'
 
  class Category extends Component {
+
+    state = {
+      categorys : [],
+      loading : false
+    }
+
+    initColumns = ()=>{
+      this.columns = [
+        {
+          title: '部门',
+          dataIndex: 'name',
+          key: 'name',
+        },
+       
+        {
+          title: '操作',
+          dataIndex: '',
+          width:300,
+          key: 'x',
+          render: () => 
+              <span>
+                  <LinkButton>修改订单类别</LinkButton>
+                  <LinkButton>查看订单</LinkButton>
+              </span>
+          ,
+        },
+      ];
+    }
+
+    getCategorys = async ()=>{
+
+      this.setState({loading:true});
+      const result = await reqCategorys('0');
+      this.setState({loading:false});
+      if(result.status === 0){
+
+        this.setState({
+          categorys:result.data
+        })
+      
+      }else{
+          message.error('获取失败');
+      }
+
+    }
+
+    componentWillMount(){
+
+      this.initColumns();
+
+    }
+
+    componentDidMount(){
+
+      this.getCategorys();
+
+    }
+
     render() {
-        //const extra = ()
-        const dataSource = [
-            {
-                "parentId": "0",
-                "_id": "5c2ed631f352726338607046",
-                "name": "分类001",
-                "__v": 0
-              },
-              {
-                "parentId": "0",
-                "_id": "5c2ed647f352726338607047",
-                "name": "分类2",
-                "__v": 0
-              },
-              {
-                "parentId": "0",
-                "_id": "5c2ed64cf352726338607048",
-                "name": "1分类3",
-                "__v": 0
-              }
-          ];
-          
-          const columns = [
-            {
-              title: '部门',
-              dataIndex: 'name',
-              key: 'name',
-            },
-           
-            {
-              title: '操作',
-              dataIndex: '',
-              key: 'x',
-              render: () => 
-                  <span>
-                      <LinkButton>修改订单类别</LinkButton>
-                      <LinkButton>查看订单</LinkButton>
-                  </span>
-              ,
-            },
-          ];
+      const {categorys,loading} = this.state;
+      
+         
         return (
             <Card title="订单类别" extra={<Button type='primary'>添加</Button>} >
                 <Table 
-                dataSource={dataSource}
-                columns={columns} 
+                loading = {loading}
+                dataSource={categorys}
+                columns={this.columns} 
                 rowKey="_id" 
                 bordered
                   />;

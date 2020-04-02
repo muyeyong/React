@@ -72,7 +72,7 @@ export class Header extends Component {
 
     render() {
         const { currentTime, picUrl, weather } = this.state;
-        const userName = memoryUtils.user.username;
+        const userName = memoryUtils.user && memoryUtils.user.username;
         
         const title = this.getTitle();
         return (<>
