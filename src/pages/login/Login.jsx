@@ -13,12 +13,9 @@ import { Redirect } from 'react-router-dom';
 
 class Login extends Component {
 
-    handleSubmit  =  async value  => {
-
-       console.log(value)
-        const result = await  reqLogin(value.username, value.password)
+    handleSubmit = async value => {
+        const result = await reqLogin(value.username, value.password)
         if (result.status === 0) {
-
             message.success('登录成功')
             storageUtils.saveUser(result.data)
             memoryUtils.user = result.data
@@ -27,8 +24,6 @@ class Login extends Component {
         } else {
             message.error(result.msg)
         }
-
-
     }
 
 
@@ -37,8 +32,6 @@ class Login extends Component {
 
 
     render() {
-
-
         const user = memoryUtils.user || storageUtils.getUser();
         if (user && user._id) return <Redirect to='/'></Redirect>;
         return <>
@@ -51,10 +44,10 @@ class Login extends Component {
                     <h2>用户登录</h2>
                     <Form onFinish={this.handleSubmit} name="normal_login" className="login-form">
                         <Form.Item name="username" rules={[
-                                              { required: true, message: 'Please input your Username!' },
-                                              {min:4,message:'用户名最少四位'},
-                                              {max:12,message:'用户名最多12位'}
-                                            ]}>
+                            { required: true, message: 'Please input your Username!' },
+                            { min: 4, message: '用户名最少四位' },
+                            { max: 12, message: '用户名最多12位' }
+                        ]}>
 
                             <Input
                                 prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username"
