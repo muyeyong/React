@@ -27,15 +27,15 @@ class AddForm extends Component {
   }
 
   render() {
-    const { categorys, parentId } = this.props
-  
+
+    const { categorys, parentId } = this.props;
     return (
       <Form  ref={this.formRef}>
-
-
-        <Item>
-          <Input placeholder="部门"  />
-        </Item>
+          <Item name='categoryName'>
+              <Input 
+              placeholder='请输入部门名称' 
+              rules={[{ required: true, message: '请输入部门名称!' }]}/>
+          </Item>
       </Form>
     )
   }

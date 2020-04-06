@@ -12,36 +12,33 @@ const Item = Form.Item
  */
 class UpdateForm extends Component {
 
+  formRef = React.createRef();
+
   static propTypes = {
-    categoryName: PropTypes.string.isRequired,
+    categoryName: PropTypes.string,
     setForm: PropTypes.func.isRequired
   }
 
-  componentWillMount () {
-    // 将form对象通过setForm()传递父组件
-    this.props.setForm(this.props.form)
+  componentDidMount() {
+    this.props.setForm(this.formRef.current)
   }
+
 
   render() {
 
     const {categoryName} = this.props
-    const { getFieldDecorator } = this.props.form
-
+    
     return (
-      <Form>
-        <Item>
-          {
-            getFieldDecorator('categoryName', {
-              initialValue: categoryName,
-              rules: [
-                {required: true, message: '分类名称必须输入'}
-              ]
-            })(
-              <Input placeholder='请输入分类名称'/>
-            )
-          }
+      <>
+      {console.log(categoryName)}
+      <Form ref={this.formRef}>
+        <Item name='categoryName'>
+        <Input 
+              placeholder='请输入部门名称' 
+              rules={[{ required: true, message: '请输入部门名称!' }]}/>
         </Item>
       </Form>
+      </>
     )
   }
 }

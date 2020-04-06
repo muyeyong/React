@@ -3,7 +3,7 @@ import jsonp from 'jsonp';
 import CryptoJS from 'crypto-js';
 import { message } from 'antd';
 
-export const reqLogin = (username, password) => ajax('./login', { username, password }, 'POST');
+export const reqLogin = (username, password) => ajax('/login', { username, password }, 'POST');
 
 export const reqAddUser = (user) => ajax('/manage/user/update', user, 'POST');
 
@@ -38,7 +38,8 @@ export const reqWeather = (city) => {
 
 export const reqCategorys = (parentId) => ajax('/manage/category/list', { parentId });
 
-export const reqUpdateCategory = (categoryId, categoryName) => ajax('/manage/category/update', { categoryId, categoryName }, 'POST');
+export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax('/manage/category/update', { categoryId, categoryName }, 'POST');
 
-export const reqAddCategory = ({ parentId, categoryName }) => ajax('/manage/category/add', { parentId, categoryName }, 'POST');
+export const reqAddCategory = (categoryName, parentId) => { return ajax('/manage/category/add', { categoryName, parentId }, 'POST') };
 
+export const reqCategoryInfo = (pageNum,pageSize,parentId,userId) => ajax('/manage/product/list',{pageNum,pageSize,parentId,userId});
