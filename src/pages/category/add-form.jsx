@@ -33,9 +33,12 @@ class AddForm extends Component {
       <Form  ref={this.formRef}>
           <Item name='categoryName'>
               <Input 
-              placeholder='请输入部门名称' 
-              rules={[{ required: true, message: '请输入部门名称!' }]}/>
+              placeholder='请输入分类名称' 
+              rules={[{ required: true, message: '请输入分类名称!' }]}/>
           </Item>
+          <Item name='price'>
+              {parentId === '0'? null: <Input type='number'  placeholder='请输入服务价格' addonAfter='元'/> }
+              </Item>
       </Form>
     )
   }

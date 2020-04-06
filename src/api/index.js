@@ -33,13 +33,22 @@ export const reqWeather = (city) => {
             }
         })
     })
-
 }
 
 export const reqCategorys = (parentId) => ajax('/manage/category/list', { parentId });
 
-export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax('/manage/category/update', { categoryId, categoryName }, 'POST');
+export const reqUpdateCategory = ({ categoryId, categoryName,price }) => ajax('/manage/category/update', { categoryId, categoryName,price  }, 'POST');
 
-export const reqAddCategory = (categoryName, parentId) => { return ajax('/manage/category/add', { categoryName, parentId }, 'POST') };
+export const reqAddCategory = (categoryName, parentId,price) => { return ajax('/manage/category/add', { categoryName, parentId,price }, 'POST') };
 
-export const reqCategoryInfo = (pageNum,pageSize,parentId,userId) => ajax('/manage/product/list',{pageNum,pageSize,parentId,userId});
+export const reqCategoryInfo = (parentId,userId) => ajax('/manage/wo/list',{parentId,userId});
+
+export const reqAllWo = (pageNum,pageSize,userId)=> ajax('/manage/wo/all',{pageNum,pageSize,userId});
+
+export const reqAddOrUpdateProduct = ()=> {}
+
+export const reqDeleteImg = ()=>{}
+
+export const reqSearchProducts = ()=>{}
+
+export const reqCategory = ()=>{}

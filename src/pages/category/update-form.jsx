@@ -16,7 +16,8 @@ class UpdateForm extends Component {
 
   static propTypes = {
     categoryName: PropTypes.string,
-    setForm: PropTypes.func.isRequired
+    setForm: PropTypes.func.isRequired,
+    parentId: PropTypes.string.isRequired
   }
 
   componentDidMount() {
@@ -26,17 +27,19 @@ class UpdateForm extends Component {
 
   render() {
 
-    const {categoryName} = this.props
+    const {categoryName,parentId} = this.props
     
     return (
       <>
-      {console.log(categoryName)}
       <Form ref={this.formRef}>
         <Item name='categoryName'>
         <Input 
-              placeholder='请输入部门名称' 
-              rules={[{ required: true, message: '请输入部门名称!' }]}/>
+              placeholder='请输入分类名称' 
+              rules={[{ required: true, message: '请输入分类名称!' }]}/>
         </Item>
+        <Item name='price'>
+         {parentId === '0'? null:  <Input type='number'  placeholder='请输入服务价格' addonAfter='元'/> }
+         </Item>
       </Form>
       </>
     )

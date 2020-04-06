@@ -11,7 +11,7 @@ export  const  menuList = [
         key:'/product',
         children:[
             {
-                title:'订单管理',
+                title:'订单类别管理',
                 icon:'BarsOutlined',
                 key:'/category'
             },
