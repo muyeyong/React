@@ -10,7 +10,7 @@ import { Modal} from 'antd';
 import storageUtils from '../../utils/storageUtils';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-export class Header extends Component {
+ class Header extends Component {
 
     state = {
         currentTime: '',

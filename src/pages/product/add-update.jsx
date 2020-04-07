@@ -6,7 +6,6 @@ import {
   Cascader,
   Button,
   message,
-  DatePicker
 } from 'antd'
 
 import PicturesWall from './pictures-wall'
@@ -15,11 +14,11 @@ import LinkButton from '../../components/link-button'
 import { reqCategorys, reqAddOrUpdateProduct } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
 import woUtils from '../../utils/woUtils';
+import DatePicker from '../../components/DatePicker';
 import { RollbackOutlined } from '@ant-design/icons';
 
 const { Item } = Form
 const { TextArea } = Input
-const { RangePicker } = DatePicker;
 
 /*
 Product的添加和更新的子路由组件
@@ -37,6 +36,7 @@ class ProductAddUpdate extends PureComponent {
     // 创建用来保存ref标识的标签对象的容器
     this.pw = React.createRef()
     this.editor = React.createRef()
+    this.form = React.createRef()
   }
 
   initOptions = async (categorys) => {
@@ -140,41 +140,47 @@ class ProductAddUpdate extends PureComponent {
 
   submit = () => {
     // 进行表单验证, 如果通过了, 才发送请求
-    this.props.form.validateFields(async (error, values) => {
-      if (!error) {
-
-        // 1. 收集数据, 并封装成product对象
-        const { name, desc, price, categoryIds } = values
-        let pCategoryId, categoryId
-        if (categoryIds.length === 1) {
-          pCategoryId = '0'
-          categoryId = categoryIds[0]
-        } else {
-          pCategoryId = categoryIds[0]
-          categoryId = categoryIds[1]
-        }
-        const imgs = this.pw.current.getImgs()
-        const detail = this.editor.current.getDetail()
-
-        const product = { name, desc, price, imgs, detail, pCategoryId, categoryId }
-
-        // 如果是更新, 需要添加_id
-        if (this.isUpdate) {
-          product._id = this.product._id
-        }
-
-        // 2. 调用接口请求函数去添加/更新
-        const result = await reqAddOrUpdateProduct(product)
-
-        // 3. 根据结果提示
-        if (result.status === 0) {
-          message.success(`${this.isUpdate ? '更新' : '添加'}商品成功!`)
-          this.props.history.goBack()
-        } else {
-          message.error(`${this.isUpdate ? '更新' : '添加'}商品失败!`)
-        }
-      }
+   
+    this.form.current.validateFields().then((err,values)=>{
+              console.log('err ',err)
+              console.log('values ',values)
     })
+    // this.props.form.validateFields().then(async (error, values) => {
+    //   if (!error) {
+          
+    //     console.log(values)
+    //     // 1. 收集数据, 并封装成product对象
+    //     // const { name, desc, price, categoryIds } = values
+    //     // let pCategoryId, categoryId
+    //     // if (categoryIds.length === 1) {
+    //     //   pCategoryId = '0'
+    //     //   categoryId = categoryIds[0]
+    //     // } else {
+    //     //   pCategoryId = categoryIds[0]
+    //     //   categoryId = categoryIds[1]
+    //     // }
+    //     // const imgs = this.pw.current.getImgs()
+    //     // const detail = this.editor.current.getDetail()
+
+    //     // const product = { name, desc, price, imgs, detail, pCategoryId, categoryId }
+
+    //     // // 如果是更新, 需要添加_id
+    //     // if (this.isUpdate) {
+    //     //   product._id = this.product._id
+    //     // }
+
+    //     // // 2. 调用接口请求函数去添加/更新
+    //     // const result = await reqAddOrUpdateProduct(product)
+
+    //     // // 3. 根据结果提示
+    //     // if (result.status === 0) {
+    //     //   message.success(`${this.isUpdate ? '更新' : '添加'}商品成功!`)
+    //     //   this.props.history.goBack()
+    //     // } else {
+    //     //   message.error(`${this.isUpdate ? '更新' : '添加'}商品失败!`)
+    //     // }
+    //   }
+    // })
   }
 
   onChange = (value, selectedOptions) => {
@@ -206,8 +212,9 @@ class ProductAddUpdate extends PureComponent {
 
   render() {
 
-    const { isUpdate, wo } = this
-    const { pCategoryId, categoryId, imgs, detail } = wo
+    const { isUpdate, wo } = this;
+    const { pCategoryId, categoryId, imgs, detail } = wo;
+    const woId = woUtils.getWoId();
     // 用来接收级联分类ID的数组
     const categoryIds = []
     if (isUpdate) {
@@ -239,20 +246,19 @@ class ProductAddUpdate extends PureComponent {
 
     return (
       <Card title={title}>
-        <Form {...formItemLayout}>
-          <Item label="订单编号">
-            {/* {
-              getFieldDecorator('name', {
-                initialValue: product.name,
-                rules: [
-                  {required: true, message: '必须输入商品名称'}
-                ]
-              })(<Input placeholder='请输入商品名称'/>)
-            } */}
-            <Input disabled={true} value={woUtils.getWoId()} />
+        <Form {...formItemLayout}
+         ref={this.form}
+         initialValues={{
+            woId:woId,
+            price:this.state.price
+         }}
+         >
+          <Item label="订单编号" name="woId">
+            <Input 
+            disabled />
           </Item>
 
-          <Item label="订单分类">
+          <Item label="订单分类" name="categoryIds">
 
             <Cascader
               placeholder='请指定商品分类'
@@ -261,26 +267,17 @@ class ProductAddUpdate extends PureComponent {
               onChange={this.onChange}
             />
           </Item>
-          <Item label="服务价格">
-
-            {/* {
-  getFieldDecorator('price', {
-    initialValue: product.price,
-    rules: [
-      {required: true, message: '必须输入商品价格'},
-      {validator: this.validatePrice}
-    ]
-  })(<Input type='number' placeholder='请输入商品价格' addonAfter='元'/>)
-} */}
-            <Input type='number' value={this.state.price} disabled={true} addonAfter='元' />
+          <Item label="服务价格" name="price">
+            <Input type='number'  disabled addonAfter='元' />
           </Item>
 
-          <Item label="服务地址">
+          <Item label="服务地址" name="address" >
           <Input placeholder='请输入服务地址'/>
           </Item>
           <Item label="服务时间">
+            <DatePicker/>
           </Item>
-          <Item label="订单图片">
+          <Item label="附加图片">
             <PicturesWall ref={this.pw} imgs={imgs} />
           </Item>
           <Item label="订单详情" labelCol={{ span: 2 }} wrapperCol={{ span: 20 }}>

@@ -47,7 +47,7 @@ export const reqAllWo = (pageNum,pageSize,userId)=> ajax('/manage/wo/all',{pageN
 
 export const reqAddOrUpdateProduct = ()=> {}
 
-export const reqDeleteImg = ()=>{}
+export const reqDeleteImg = (name) => ajax('/manage/img/delete', {name}, 'POST')
 
 export const reqSearchProducts = ()=>{}
 
