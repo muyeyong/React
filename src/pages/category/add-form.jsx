@@ -30,18 +30,18 @@ class AddForm extends Component {
 
     const { categorys, parentId } = this.props;
     return (
-      <Form  ref={this.formRef}>
-          <Item name='categoryName'>
-              <Input 
-              placeholder='请输入分类名称' 
-              rules={[{ required: true, message: '请输入分类名称!' }]}/>
-          </Item>
-          <Item name='price'>
-              {parentId === '0'? null: <Input type='number'  placeholder='请输入服务价格' addonAfter='元'/> }
-              </Item>
+      <Form ref={this.formRef}>
+        <Item name='categoryName'>
+          <Input
+            placeholder='请输入分类名称'
+            rules={[{ required: true, message: '请输入分类名称!' }]} />
+        </Item>
+        <Item name='price'>
+          {parentId === '0' ? null : <Input type='number' placeholder='请输入服务价格' addonAfter='元' />}
+        </Item>
       </Form>
     )
   }
 }
 
-export default  AddForm
+export default AddForm

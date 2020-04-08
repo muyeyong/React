@@ -6,19 +6,20 @@ import {
   Cascader,
   Button,
   message,
+  DatePicker
 } from 'antd'
-
+import moment from 'moment';
 import PicturesWall from './pictures-wall'
 import RichTextEditor from './rich-text-editor'
 import LinkButton from '../../components/link-button'
-import { reqCategorys, reqAddOrUpdateProduct } from '../../api'
+import { reqCategorys, reqAddOrUpdateWo } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
 import woUtils from '../../utils/woUtils';
-import DatePicker from '../../components/DatePicker';
 import { RollbackOutlined } from '@ant-design/icons';
 
 const { Item } = Form
 const { TextArea } = Input
+const { RangePicker } = DatePicker
 
 /*
 Product的添加和更新的子路由组件
@@ -74,10 +75,7 @@ class ProductAddUpdate extends PureComponent {
     })
   }
 
-  /*
-  异步获取一级/二级分类列表, 并显示
-  async函数的返回值是一个新的promise对象, promise的结果和值由async的结果来决定
-   */
+
   getCategorys = async (parentId) => {
     const result = await reqCategorys(parentId)   // {status: 0, data: categorys}
     if (result.status === 0) {
@@ -92,17 +90,7 @@ class ProductAddUpdate extends PureComponent {
   }
 
 
-  /*
-  验证价格的自定义验证函数
-   */
-  validatePrice = (rule, value, callback) => {
-    console.log(value, typeof value)
-    if (value * 1 > 0) {
-      callback() // 验证通过
-    } else {
-      callback('价格必须大于0') // 验证没通过
-    }
-  }
+
 
   /*
   用加载下一级列表的回调函数
@@ -139,52 +127,35 @@ class ProductAddUpdate extends PureComponent {
   }
 
   submit = () => {
-    // 进行表单验证, 如果通过了, 才发送请求
-   
-    this.form.current.validateFields().then((err,values)=>{
-              console.log('err ',err)
-              console.log('values ',values)
+    this.form.current.validateFields().then(async (values) => {
+      const { woId, categoryIds, time, address } = values;
+      const userId = memoryUtils.user._id;
+      const createDate = time[0].format('x');
+      const deadline = time[1].format('x');
+      const parentId = categoryIds[0];
+      const cost = this.state.price;
+      const imgs = this.pw.current.getImgs();
+      const detail = this.editor.current.getDetail();
+      const wo = { woId, userId, createDate, deadline, parentId, cost, imgs, detail, address };
+      const result = await reqAddOrUpdateWo(wo);
+      if (result.status === 0) {
+        message.success('申请成功')
+      } else {
+        message.error('申请失败，请重试');
+      }
+
+    }).catch((err) => {
+      console.log('err  ', err);
     })
-    // this.props.form.validateFields().then(async (error, values) => {
-    //   if (!error) {
-          
-    //     console.log(values)
-    //     // 1. 收集数据, 并封装成product对象
-    //     // const { name, desc, price, categoryIds } = values
-    //     // let pCategoryId, categoryId
-    //     // if (categoryIds.length === 1) {
-    //     //   pCategoryId = '0'
-    //     //   categoryId = categoryIds[0]
-    //     // } else {
-    //     //   pCategoryId = categoryIds[0]
-    //     //   categoryId = categoryIds[1]
-    //     // }
-    //     // const imgs = this.pw.current.getImgs()
-    //     // const detail = this.editor.current.getDetail()
-
-    //     // const product = { name, desc, price, imgs, detail, pCategoryId, categoryId }
-
-    //     // // 如果是更新, 需要添加_id
-    //     // if (this.isUpdate) {
-    //     //   product._id = this.product._id
-    //     // }
-
-    //     // // 2. 调用接口请求函数去添加/更新
-    //     // const result = await reqAddOrUpdateProduct(product)
-
-    //     // // 3. 根据结果提示
-    //     // if (result.status === 0) {
-    //     //   message.success(`${this.isUpdate ? '更新' : '添加'}商品成功!`)
-    //     //   this.props.history.goBack()
-    //     // } else {
-    //     //   message.error(`${this.isUpdate ? '更新' : '添加'}商品失败!`)
-    //     // }
-    //   }
-    // })
   }
 
   onChange = (value, selectedOptions) => {
     this.setState({ price: selectedOptions[selectedOptions.length - 1].price });
+  }
+
+  disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current <= moment().endOf('day');
   }
 
   componentDidMount() {
@@ -247,18 +218,18 @@ class ProductAddUpdate extends PureComponent {
     return (
       <Card title={title}>
         <Form {...formItemLayout}
-         ref={this.form}
-         initialValues={{
-            woId:woId,
-            price:this.state.price
-         }}
-         >
+          ref={this.form}
+          initialValues={{
+            woId: woId,
+            price: this.state.price
+          }}
+        >
           <Item label="订单编号" name="woId">
-            <Input 
-            disabled />
+            <Input
+              disabled />
           </Item>
 
-          <Item label="订单分类" name="categoryIds">
+          <Item label="订单分类" name="categoryIds" rules={[{ required: true, message: '请选择订单分类' }]}>
 
             <Cascader
               placeholder='请指定商品分类'
@@ -267,17 +238,17 @@ class ProductAddUpdate extends PureComponent {
               onChange={this.onChange}
             />
           </Item>
-          <Item label="服务价格" name="price">
-            <Input type='number'  disabled addonAfter='元' />
+          <Item label="服务价格" >
+            <Input type='number' value={this.state.price} disabled addonAfter='元' />
           </Item>
 
-          <Item label="服务地址" name="address" >
-          <Input placeholder='请输入服务地址'/>
+          <Item label="服务地址" name="address" rules={[{ required: true, message: '请输入地址' }]}>
+            <Input placeholder='请输入服务地址' />
           </Item>
-          <Item label="服务时间">
-            <DatePicker/>
+          <Item label="服务时间" name="time" rules={[{ type: 'array', required: true, message: '请选择服务时间' }]}>
+            <RangePicker showTime disabledDate={this.disabledDate} format="YYYY-MM-DD HH:mm:ss" />
           </Item>
-          <Item label="附加图片">
+          <Item label="附加图片" >
             <PicturesWall ref={this.pw} imgs={imgs} />
           </Item>
           <Item label="订单详情" labelCol={{ span: 2 }} wrapperCol={{ span: 20 }}>

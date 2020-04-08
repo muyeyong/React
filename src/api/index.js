@@ -45,7 +45,7 @@ export const reqCategoryInfo = (parentId,userId) => ajax('/manage/wo/list',{pare
 
 export const reqAllWo = (pageNum,pageSize,userId)=> ajax('/manage/wo/all',{pageNum,pageSize,userId});
 
-export const reqAddOrUpdateProduct = ()=> {}
+export const reqAddOrUpdateWo =(wo) => ajax('/manage/product/add', wo, 'POST')
 
 export const reqDeleteImg = (name) => ajax('/manage/img/delete', {name}, 'POST')
 

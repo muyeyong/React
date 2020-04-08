@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
   Card,
   Select,
@@ -10,11 +10,11 @@ import {
 } from 'antd'
 
 import LinkButton from '../../components/link-button'
-import { reqSearchProducts, reqUpdateStatus,reqAllWo} from '../../api'
-import {PAGE_SIZE} from '../../utils/constants'
+import { reqSearchProducts, reqUpdateStatus, reqAllWo } from '../../api'
+import { PAGE_SIZE } from '../../utils/constants'
 import memoryUtils from "../../utils/memoryUtils";
 import statusUtils from '../../utils/statusUtils'
-
+import moment from 'moment';
 const Option = Select.Option
 
 /*
@@ -41,11 +41,13 @@ export default class ProductHome extends Component {
       },
       {
         title: '创建时间',
-        dataIndex: 'createTime',
+        dataIndex: 'createDate',
+        render: (createDate) => moment(createDate).format('YYYY-MM-DD HH:mm:ss')
       },
       {
         title: '截至时间',
         dataIndex: 'deadline',
+        render: (deadline) => moment(deadline).format('YYYY-MM-DD HH:mm:ss')
       },
       {
         title: '费用',
@@ -57,8 +59,8 @@ export default class ProductHome extends Component {
         title: '订单状态',
         // dataIndex: 'status',
         render: (product) => {
-          const {status, _id} = product
-          const newStatus = status%5 + 1
+          const { status, _id } = product
+          const newStatus = status % 5 + 1
           return (
             <span>
               {/* <Button
@@ -111,21 +113,21 @@ export default class ProductHome extends Component {
    */
   getAllWo = async (pageNum) => {
     this.pageNum = pageNum // 保存pageNum, 让其它方法可以看到
-    this.setState({loading: true}) // 显示loading
+    this.setState({ loading: true }) // 显示loading
 
-    const {searchName, searchType} = this.state
+    const { searchName, searchType } = this.state
     // 如果搜索关键字有值, 说明我们要做搜索分页
     let result
     if (searchName) {
-      result = await reqSearchProducts({pageNum, pageSize: PAGE_SIZE, searchName, searchType})
+      result = await reqSearchProducts({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
     } else { // 一般分页请求
-      result = await reqAllWo(pageNum, PAGE_SIZE,memoryUtils.user._id)
+      result = await reqAllWo(pageNum, PAGE_SIZE, memoryUtils.user._id)
     }
 
-    this.setState({loading: false}) // 隐藏loading
+    this.setState({ loading: false }) // 隐藏loading
     if (result.status === 0) {
       // 取出分页数据, 更新状态, 显示分页列表
-      const {total, list} = result.data
+      const { total, list } = result.data
       this.setState({
         total,
         wos: list
@@ -144,36 +146,36 @@ export default class ProductHome extends Component {
   //   }
   // }
 
-  componentWillMount () {
+  componentWillMount() {
     this.initColumns()
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.getAllWo(1)
   }
 
   render() {
 
     // 取出状态数据
-    const {wos, total, loading, searchType, searchName} = this.state
+    const { wos, total, loading, searchType, searchName } = this.state
 
 
 
     const title = (
       <span>
         <Select
-          value= {searchType}
-          style={{width: 150}}
-          onChange={value => this.setState({searchType:value})}
+          value={searchType}
+          style={{ width: 150 }}
+          onChange={value => this.setState({ searchType: value })}
         >
           <Option value='productName'>按名称搜索</Option>
           <Option value='productDesc'>按描述搜索</Option>
         </Select>
         <Input
           placeholder='关键字'
-          style={{width: 150, margin: '0 15px'}}
+          style={{ width: 150, margin: '0 15px' }}
           value={searchName}
-          onChange={event => this.setState({searchName:event.target.value})}
+          onChange={event => this.setState({ searchName: event.target.value })}
         />
         <Button type='primary' onClick={() => this.getProducts(1)}>搜索</Button>
       </span>
@@ -181,7 +183,7 @@ export default class ProductHome extends Component {
 
     const extra = (
       <Button type='primary' onClick={() => this.props.history.push('/product/addupdate')}>
-        <Icon type='plus'/>
+        <Icon type='plus' />
         申请服务
       </Button>
     )
