@@ -139,7 +139,8 @@ class ProductAddUpdate extends PureComponent {
       const wo = { woId, userId, createDate, deadline, parentId, cost, imgs, detail, address };
       const result = await reqAddOrUpdateWo(wo);
       if (result.status === 0) {
-        message.success('申请成功')
+        message.success('申请成功');
+        this.props.history.push('/product');
       } else {
         message.error('申请失败，请重试');
       }

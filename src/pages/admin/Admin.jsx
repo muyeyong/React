@@ -11,10 +11,11 @@ import User from '../user/user';
 import Product from '../product/product';
 import Role from '../role/role';
 import Home from '../Home/home';
+import { connect } from 'react-redux';
 
-const {Sider,Content,Footer} = Layout
+const { Sider, Content, Footer } = Layout
 
-export default class Admin extends Component{
+ class Admin extends Component{
     render(){
         return <>
         <Layout style={{height:'100%'}}>
@@ -40,3 +41,8 @@ export default class Admin extends Component{
         </>
     }
 }
+
+export default connect(
+    state => ({user: state.user}),
+    {}
+  )(Admin)

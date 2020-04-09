@@ -40,6 +40,10 @@ export default class ProductHome extends Component {
         dataIndex: 'woId',
       },
       {
+        title: '服务地址',
+        dataIndex: 'address'
+      },
+      {
         title: '创建时间',
         dataIndex: 'createDate',
         render: (createDate) => moment(createDate).format('YYYY-MM-DD HH:mm:ss')
@@ -74,39 +78,39 @@ export default class ProductHome extends Component {
           )
         }
       },
-      // {
-      //   width: 100,
-      //   title: '操作',
-      //   render: (product) => {
-      //     return (
-      //       <span>
-      //         {/*将product对象使用state传递给目标路由组件*/}
-      //         <LinkButton onClick={() => this.showDetail(product)}>详情</LinkButton>
-      //         <LinkButton onClick={() => this.showUpdate(product)}>修改</LinkButton>
-      //       </span>
-      //     )
-      //   }
-      // },
+      {
+        width: 100,
+        title: '操作',
+        render: (wo) => {
+          return (
+            <span>
+              {/*将product对象使用state传递给目标路由组件*/}
+              <LinkButton onClick={() => this.showDetail(wo)}>详情</LinkButton>
+              <LinkButton onClick={() => this.showUpdate(wo)}>修改</LinkButton>
+            </span>
+          )
+        }
+      },
     ];
   }
 
   /*
   显示商品详情界面
-   */
-  // showDetail = (procut) => {
-  //   // 缓存product对象 ==> 给detail组件使用
-  //   memoryUtils.product = procut
-  //   this.props.history.push('/product/detail')
-  // }
+    */
+  showDetail = (wo) => {
+    // 缓存product对象 ==> 给detail组件使用
+    memoryUtils.wo = wo
+    this.props.history.push('/product/detail')
+  }
 
-  // /*
+
   // 显示修改商品界面
-  //  */
-  // showUpdate = (procut) => {
-  //   // 缓存product对象 ==> 给detail组件使用
-  //   memoryUtils.product = procut
-  //   this.props.history.push('/product/addupdate')
-  // }
+
+  showUpdate = (wo) => {
+    // 缓存product对象 ==> 给detail组件使用
+    memoryUtils.wo = wo
+    this.props.history.push('/product/addupdate')
+  }
 
   /*
   获取指定页码的列表数据显示
@@ -183,7 +187,6 @@ export default class ProductHome extends Component {
 
     const extra = (
       <Button type='primary' onClick={() => this.props.history.push('/product/addupdate')}>
-        <Icon type='plus' />
         申请服务
       </Button>
     )

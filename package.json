@@ -13,6 +13,7 @@
     "customize-cra": "^0.9.1",
     "draft-js": "^0.11.5",
     "draftjs-to-html": "^0.9.1",
+    "express": "^4.17.1",
     "html-to-draftjs": "^1.5.0",
     "jsonp": "^0.2.1",
     "less": "^3.11.0",
@@ -21,9 +22,13 @@
     "react-app-rewired": "^2.1.5",
     "react-dom": "^16.13.1",
     "react-draft-wysiwyg": "^1.14.4",
+    "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.3.1",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
     "store": "^2.0.12",
     "typescript": "^3.8.3"
   },
@@ -50,6 +55,9 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
-    "@types/react-router-dom": "^5.1.3"
+    "@types/react-router-dom": "^5.1.3",
+    "install": "^0.13.0",
+    "npm": "^6.14.4",
+    "redux-devtools": "^3.5.0"
   }
 }
