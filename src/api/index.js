@@ -37,24 +37,31 @@ export const reqWeather = (city) => {
 
 export const reqCategorys = (parentId) => ajax('/manage/category/list', { parentId });
 
-export const reqUpdateCategory = ({ categoryId, categoryName,price }) => ajax('/manage/category/update', { categoryId, categoryName,price  }, 'POST');
+export const reqUpdateCategory = ({ categoryId, categoryName, price }) => ajax('/manage/category/update', { categoryId, categoryName, price }, 'POST');
 
-export const reqAddCategory = (categoryName, parentId,price) => { return ajax('/manage/category/add', { categoryName, parentId,price }, 'POST') };
+export const reqAddCategory = (categoryName, parentId, price) => { return ajax('/manage/category/add', { categoryName, parentId, price }, 'POST') };
 
-export const reqCategoryInfo = (parentId,userId) => ajax('/manage/wo/list',{parentId,userId});
+export const reqCategoryInfo = (parentId, userId) => ajax('/manage/wo/list', { parentId, userId });
 
-export const reqAllWo = (pageNum,pageSize,userId)=> ajax('/manage/wo/all',{pageNum,pageSize,userId});
+export const reqAllWo = (pageNum, pageSize, userId) => ajax('/manage/wo/all', { pageNum, pageSize, userId });
 
-export const reqAddOrUpdateWo =(wo) => ajax('/manage/product/add', wo, 'POST')
+export const reqAddOrUpdateWo = (wo) => ajax('/manage/product/add', wo, 'POST')
 
-export const reqDeleteImg = (name) => ajax('/manage/img/delete', {name}, 'POST')
+export const reqDeleteImg = (name) => ajax('/manage/img/delete', { name }, 'POST')
 
-export const reqSearchProducts = ()=>{}
+export const reqSearchProducts = () => { }
 
-export const reqCategory = ()=>{}
+export const reqCategory = () => { }
 
-export const reqRoles = () => ajax( '/manage/role/list')
+export const reqRoles = () => ajax('/manage/role/list')
 // 添加角色
-export const reqAddRole = (roleName) => ajax( '/manage/role/add', {roleName}, 'POST')
+export const reqAddRole = (roleName) => ajax('/manage/role/add', { roleName }, 'POST')
 // 添加角色
 export const reqUpdateRole = (role) => ajax('/manage/role/update', role, 'POST')
+
+// 获取所有用户的列表
+export const reqUsers = () => ajax('/manage/user/list')
+// 删除指定用户
+export const reqDeleteUser = (userId) => ajax('/manage/user/delete', { userId }, 'POST')
+// 添加/更新用户
+export const reqAddOrUpdateUser = (user) => ajax('/manage/user/' + (user._id ? 'update' : 'add'), user, 'POST')

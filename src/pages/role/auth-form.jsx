@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import {
   Form,
   Input,
-  TreeSelect
+  Tree
 } from 'antd'
 import { menuList } from '../../config/menuConfig'
 
 const Item = Form.Item
 
-const { TreeNode } = TreeSelect;
+const { TreeNode } = Tree;
 
 /*
 添加分类的form组件
@@ -36,16 +36,16 @@ export default class AuthForm extends PureComponent {
   getMenus = () => this.state.checkedKeys
 
 
-  getTreeNodes = (menuList) => {
-    return menuList.reduce((pre, item) => {
-      pre.push(
-        <TreeNode title={item.title} key={item.key}>
-          {item.children ? this.getTreeNodes(item.children) : null}
-        </TreeNode>
-      )
-      return pre
-    }, [])
-  }
+  // getTreeNodes = (menuList) => {
+  //   return menuList.reduce((pre, item) => {
+  //     pre.push(
+  //       <TreeNode title={item.title} key={item.key}>
+  //         {item.children ? this.getTreeNodes(item.children) : null}
+  //       </TreeNode>
+  //     )
+  //     return pre
+  //   }, [])
+  // }
 
   // 选中某个node时的回调
   onCheck = checkedKeys => {
@@ -55,7 +55,7 @@ export default class AuthForm extends PureComponent {
 
 
   componentWillMount() {
-    this.treeNodes = this.getTreeNodes(menuList)
+    // this.treeNodes = this.getTreeNodes(menuList)
   }
 
   // 根据新传入的role来更新checkedKeys状态
@@ -68,11 +68,9 @@ export default class AuthForm extends PureComponent {
     this.setState({
       checkedKeys: menus
     })
-    // this.state.checkedKeys = menus
   }
 
   render() {
-    console.log('AuthForm render()')
     const { role } = this.props
     const { checkedKeys } = this.state
     // 指定Item布局的配置对象
@@ -87,18 +85,15 @@ export default class AuthForm extends PureComponent {
           <Input value={role.name} disabled />
         </Item>
 
-        <TreeSelect
+        <Tree
           checkable
           defaultExpandAll={true}
           checkedKeys={checkedKeys}
           onCheck={this.onCheck}
-          treeCheckable={true}
-          style={{ width: '100%' }}
+          treeData={menuList}
         >
-          <TreeNode title="平台权限" key="all">
-            {this.treeNodes}
-          </TreeNode>
-        </TreeSelect >
+
+        </Tree >
       </div>
     )
   }
