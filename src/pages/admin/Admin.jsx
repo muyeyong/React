@@ -1,6 +1,6 @@
-import React ,{Component} from 'react';
-import {Layout} from 'antd';
-import {Route,BrowserRouter as Router,Switch,Redirect} from 'react-router-dom'
+import React, { Component } from 'react';
+import { Layout } from 'antd';
+import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 import LeftNav from '../../components/left-nav/leftNav';
 import Header from '../../components/header/Header';
 import Category from '../category/category';
@@ -15,34 +15,36 @@ import { connect } from 'react-redux';
 
 const { Sider, Content, Footer } = Layout
 
- class Admin extends Component{
-    render(){
+class Admin extends Component {
+    render() {
+        const user = this.props.user;
+        if (!user || !user._id) return <Redirect to='/login/' />;
         return <>
-        <Layout style={{height:'100%'}}>
-            <Sider><LeftNav/></Sider>
-            <Layout>
-                <Header></Header>
-                <Content style={{backgroundColor:'#fff',margin:20}}>
-                  <Switch>
-                      <Route path='/home' component={Home}></Route>
-                      <Route path='/user' component={User}></Route>
-                      <Route path='/role' component={Role}></Route>
-                      <Route path='/category' component={Category}></Route>
-                      <Route path='/product' component={Product}></Route>
-                      <Route path='/charts/pie' component={Pie}></Route>
-                      <Route path='/charts/line' component={Line}></Route>
-                      <Route path='/charts/bar' component={Bar}></Route>
-                      <Redirect to='/home'></Redirect>
-                  </Switch>
-                </Content>
-                <Footer style={{textAlign:'center',color:'#cccc'}}>底部</Footer>
+            <Layout style={{ height: '100%' }}>
+                <Sider><LeftNav /></Sider>
+                <Layout>
+                    <Header></Header>
+                    <Content style={{ backgroundColor: '#fff', margin: 20 }}>
+                        <Switch>
+                            <Route path='/home' component={Home}></Route>
+                            <Route path='/user' component={User}></Route>
+                            <Route path='/role' component={Role}></Route>
+                            <Route path='/category' component={Category}></Route>
+                            <Route path='/product' component={Product}></Route>
+                            <Route path='/charts/pie' component={Pie}></Route>
+                            <Route path='/charts/line' component={Line}></Route>
+                            <Route path='/charts/bar' component={Bar}></Route>
+                            <Redirect to='/home'></Redirect>
+                        </Switch>
+                    </Content>
+                    <Footer style={{ textAlign: 'center', color: '#cccc' }}>底部</Footer>
+                </Layout>
             </Layout>
-        </Layout>
         </>
     }
 }
 
 export default connect(
-    state => ({user: state.user}),
+    state => ({ user: state.user }),
     {}
-  )(Admin)
+)(Admin)

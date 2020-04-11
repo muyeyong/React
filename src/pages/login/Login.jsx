@@ -7,23 +7,14 @@ import { reqLogin } from '../../api';
 import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
 import { Redirect } from 'react-router-dom';
-
-
+import { connect } from 'react-redux';
+import { login } from '../../redux/actions';
 
 
 class Login extends Component {
 
     handleSubmit = async value => {
-        const result = await reqLogin(value.username, value.password)
-        if (result.status === 0) {
-            message.success('登录成功')
-            storageUtils.saveUser(result.data)
-            memoryUtils.user = result.data
-            this.props.history.push('/')
-
-        } else {
-            message.error(result.msg)
-        }
+        this.props.login(value.username, value.password);
     }
 
 
@@ -32,7 +23,7 @@ class Login extends Component {
 
 
     render() {
-        const user = memoryUtils.user || storageUtils.getUser();
+        const user = this.props.user;
         if (user && user._id) return <Redirect to='/'></Redirect>;
         return <>
             <div className="login">
@@ -45,7 +36,7 @@ class Login extends Component {
                     <Form onFinish={this.handleSubmit} name="normal_login" className="login-form">
                         <Form.Item name="username" rules={[
                             { required: true, message: 'Please input your Username!' },
-                            { min: 4, message: '用户名最少四位' },
+                            { min: 3, message: '用户名最少3位' },
                             { max: 12, message: '用户名最多12位' }
                         ]}>
 
@@ -78,6 +69,9 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default connect(
+    state => ({ user: state.user }),
+    { login }
+)(Login)
 
 

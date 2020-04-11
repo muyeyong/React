@@ -6,11 +6,13 @@ import memoryUtils from '../../utils/memoryUtils';
 import { withRouter } from 'react-router-dom';
 import { menuList } from '../../config/menuConfig'
 import LinkButton from '../link-button';
-import { Modal} from 'antd';
+import { Modal } from 'antd';
 import storageUtils from '../../utils/storageUtils';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
+import { logout } from '../../redux/actions';
 
- class Header extends Component {
+class Header extends Component {
 
     state = {
         currentTime: '',
@@ -19,7 +21,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
     }
 
     getTime = () => {
-       this.intervald = setInterval(() => {
+        this.intervald = setInterval(() => {
             const currentTime = formateDate(Date.now());
             this.setState({ currentTime });
         }, 1000);
@@ -40,8 +42,8 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
             if (item.children) {
                 const cItem = item.children.find(cItem => cItem.key === path);
                 if (cItem) title = item.title;
-            } else if(item.key === path){
-                 title = item.title;
+            } else if (item.key === path) {
+                title = item.title;
             }
         })
         return title;
@@ -53,33 +55,32 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
         this.getWeather();
     }
 
-    logout = ()=>{
+    logout = () => {
         Modal.confirm({
             title: '确定退出?',
             icon: <ExclamationCircleOutlined />,
-            onOk:()=>{
-                storageUtils.removeUser();
-                memoryUtils.user = {};
+            onOk: () => {
+                this.props.logout();
                 this.props.history.replace('/login');
             },
-          });
-       
+        });
+
     }
-  
-    componentWillUnmount(){
+
+    componentWillUnmount() {
         clearInterval(this.intervald);
     }
 
     render() {
         const { currentTime, picUrl, weather } = this.state;
-        const userName = memoryUtils.user && memoryUtils.user.username;
-        
+        const userName = this.props.user.username
+
         const title = this.getTitle();
         return (<>
             <div className='header'>
                 <div className='header-top'>
                     <span> 欢迎,{userName}</span>
-                   <LinkButton onClick={this.logout}>退出</LinkButton>
+                    <LinkButton onClick={this.logout}>退出</LinkButton>
                 </div>
                 <div className='header-bottom'>
                     <div className='header-bottom-left'>{title}</div>
@@ -96,4 +97,9 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
     }
 }
 
-export default withRouter(Header)
+
+const wrapHeader = withRouter(Header);
+export default connect(
+    state => ({ user: state.user }),
+    { logout }
+)(wrapHeader)

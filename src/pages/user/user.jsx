@@ -117,21 +117,24 @@ export default class User extends Component {
         // console.log(this.form)
         this.form.validateFields().then(async value => {
             this.setState({ isShow: false })
-            const user = this.form.resetFields();
-            console.log(user)
+            const { password, username, phone, email, role_id } = value;
+            const user = { password, username, phone, email, role_id };
+
+            this.form.resetFields();
+
 
             // 如果是更新, 需要给user指定_id属性
             if (this.user) {
                 user._id = this.user._id
             }
 
-            // // 2. 提交添加的请求
-            // const result = await reqAddOrUpdateUser(user)
-            // // 3. 更新列表显示
-            // if (result.status === 0) {
-            //     message.success(`${this.user ? '修改' : '添加'}用户成功`)
-            //     this.getUsers()
-            // }
+            // 2. 提交添加的请求
+            const result = await reqAddOrUpdateUser(user)
+            // 3. 更新列表显示
+            if (result.status === 0) {
+                message.success(`${this.user ? '修改' : '添加'}用户成功`)
+                this.getUsers()
+            }
         }).catch(err => {
 
         })
@@ -181,9 +184,10 @@ export default class User extends Component {
                     visible={isShow}
                     onOk={this.addOrUpdateUser}
                     onCancel={() => {
-                        this.form.resetFields()
                         this.setState({ isShow: false })
+                        this.form.resetFields()
                     }}
+                    destroyOnClose={true}
                 >
                     <UserForm
                         setForm={form => this.form = form}

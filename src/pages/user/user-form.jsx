@@ -36,8 +36,21 @@ class UserForm extends PureComponent {
     }
 
     return (
-      <Form ref={this.formRef} {...formItemLayout}>
-        <Item label='用户名' name='username' rules={[{ required: true, message: '请输入用户名' }]} >
+      <Form
+        ref={this.formRef}
+        initialValues={{
+          username: user.username,
+          phone: user.phone,
+          email: user.email,
+          role_id: user.role_id
+        }}
+        {...formItemLayout}
+      >
+        <Item label='用户名' name='username' rules={[
+          { required: true, message: '请输入用户名' },
+          { min: 3, message: '用户名最少3位' },
+          { max: 12, message: '用户名最多12位' }]
+        }>
           <Input placeholder='请输入用户名' />
         </Item>
         {
@@ -108,7 +121,6 @@ class UserForm extends PureComponent {
         <Item label='角色' name='role_id' rules={[{
           required: true, message: '请选择角色类型'
         }]}
-
         >
 
           <Select>
