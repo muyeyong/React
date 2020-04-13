@@ -16,6 +16,7 @@ import { reqCategorys, reqAddOrUpdateWo } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
 import woUtils from '../../utils/woUtils';
 import { RollbackOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
 
 const { Item } = Form
 const { TextArea } = Input
@@ -129,7 +130,7 @@ class ProductAddUpdate extends PureComponent {
   submit = () => {
     this.form.current.validateFields().then(async (values) => {
       const { woId, categoryIds, time, address } = values;
-      const userId = memoryUtils.user._id;
+      const userId = this.props.user._id;
       const createDate = time[0].format('x');
       const deadline = time[1].format('x');
       const parentId = categoryIds[0];
@@ -264,7 +265,7 @@ class ProductAddUpdate extends PureComponent {
   }
 }
 
-export default ProductAddUpdate
+export default connect(state => ({ user: state.user }))(ProductAddUpdate);
 
 
 /*

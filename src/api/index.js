@@ -64,4 +64,7 @@ export const reqUsers = () => ajax('/manage/user/list')
 // 删除指定用户
 export const reqDeleteUser = (userId) => ajax('/manage/user/delete', { userId }, 'POST')
 // 添加/更新用户
-export const reqAddOrUpdateUser = (user) => ajax('/manage/user/' + (user._id ? 'update' : 'add'), user, 'POST')
+export const reqAddOrUpdateUser = (user) => ajax('/manage/user/' + (user._id ? 'update' : 'add'), user, 'POST');
+
+export const reqUserRole = (roleId) => ajax('/manage/user/auth', roleId);
+

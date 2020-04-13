@@ -10,17 +10,18 @@ import {
 } from 'antd'
 
 import LinkButton from '../../components/link-button'
-import { reqSearchProducts, reqUpdateStatus, reqAllWo } from '../../api'
+import { reqSearchProducts, reqUpdateStatus, reqAllWo, reqUserRole } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 import memoryUtils from "../../utils/memoryUtils";
 import statusUtils from '../../utils/statusUtils'
 import moment from 'moment';
+import { connect } from 'react-redux';
 const Option = Select.Option
 
 /*
 Product的默认子路由组件
  */
-export default class ProductHome extends Component {
+class ProductHome extends Component {
 
   state = {
     total: 0, // 商品的总数量
@@ -125,7 +126,7 @@ export default class ProductHome extends Component {
     if (searchName) {
       result = await reqSearchProducts({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
     } else { // 一般分页请求
-      result = await reqAllWo(pageNum, PAGE_SIZE, memoryUtils.user._id)
+      result = await reqAllWo(pageNum, PAGE_SIZE, this.props.user._id)
     }
 
     this.setState({ loading: false }) // 隐藏loading
@@ -156,6 +157,7 @@ export default class ProductHome extends Component {
 
   componentDidMount() {
     this.getAllWo(1)
+    reqUserRole(this.props.user.role_id)
   }
 
   render() {
@@ -211,3 +213,5 @@ export default class ProductHome extends Component {
     )
   }
 }
+
+export default connect(state => ({ user: state.user }))(ProductHome);

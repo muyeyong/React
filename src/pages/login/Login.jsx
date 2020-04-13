@@ -19,9 +19,6 @@ class Login extends Component {
 
 
 
-
-
-
     render() {
         const user = this.props.user;
         if (user && user._id) return <Redirect to='/'></Redirect>;

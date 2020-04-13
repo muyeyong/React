@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Logo from '../../assets/imags/logo.png';
 import { Link, withRouter } from 'react-router-dom';
 import './leftNav.less';
-import { findIndex, find } from 'lodash';
+import { findIndex, find, indexOf } from 'lodash';
 import { Menu } from 'antd';
 import {
     HomeOutlined,
@@ -57,8 +57,8 @@ export class leftNav extends Component {
         const { key } = item;
         const menus = this.props.user.role.menus;
         const username = this.props.user.username;
-        console.log(menus, key)
-        if (username === 'admin' || findIndex(menus, key) !== -1) {
+        console.log(key, menus, findIndex(menus, key))
+        if (username === 'admin' || indexOf(menus, key) !== -1) {
 
             return true;
         } else if (item.hasOwnProperty('children')) {
@@ -101,7 +101,6 @@ export class leftNav extends Component {
     }
     render() {
         const path = this.props.location.pathname;
-        console.log(path)
         return (
             <>
                 <div className='left-nva'>

@@ -1,7 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Upload, Icon, Modal, message } from 'antd'
-import {reqDeleteImg} from '../../api'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Upload, Modal, message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import { reqDeleteImg } from '../../api';
 import {BASE_IMG_URL} from "../../utils/constants";
 /*
 用于图片上传的组件
@@ -106,7 +107,6 @@ export default class PicturesWall extends React.Component {
     const { previewVisible, previewImage, fileList } = this.state;
     const uploadButton = (
       <div>
-        <Icon type="plus" />
         <div>Upload</div>
       </div>
     );
@@ -121,7 +121,7 @@ export default class PicturesWall extends React.Component {
           onPreview={this.handlePreview}
           onChange={this.handleChange}
         >
-          {fileList.length >= 4 ? null : uploadButton}
+          <UploadOutlined /> {fileList.length >= 4 ? null : uploadButton}
         </Upload>
 
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
