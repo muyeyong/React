@@ -1,6 +1,7 @@
 import store from 'store'
 
 const USER_KEY = 'user_key'
+const USER_AUTH = 'user_auth'
 
 export default {
     saveUser(user) {
@@ -16,5 +17,15 @@ export default {
     removeUser() {
         // localStorage.removeItem(USER_KEY)
         store.remove(USER_KEY)
+    },
+    saveUserAuth(auth) {
+        store.set(USER_AUTH, auth || false)
+    },
+    getUserAuth() {
+        return store.get(USER_AUTH) || false;
+    },
+    removeUserAuth() {
+        store.remove(USER_AUTH)
     }
+
 }

@@ -10,12 +10,14 @@ import {
 } from 'antd'
 
 import LinkButton from '../../components/link-button'
-import { reqSearchProducts, reqUpdateStatus, reqAllWo, reqUserRole } from '../../api'
+import { reqSearchProducts, reqUpdateStatus, reqAllWo, reqUserRole, reqAddOrUpdateWo, reqDelectWo } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 import memoryUtils from "../../utils/memoryUtils";
 import statusUtils from '../../utils/statusUtils'
 import moment from 'moment';
 import { connect } from 'react-redux';
+import { getUserAuth } from '../../redux/actions';
+import { Link } from 'react-router-dom'
 const Option = Select.Option
 
 /*
@@ -60,11 +62,11 @@ class ProductHome extends Component {
         render: (cost) => '¥' + cost  // 当前指定了对应的属性, 传入的是对应的属性值
       },
       {
-        width: 100,
+        width: 200,
         title: '订单状态',
         // dataIndex: 'status',
-        render: (product) => {
-          const { status, _id } = product
+        render: (wo) => {
+          const { status, _id } = wo
           const newStatus = status % 5 + 1
           return (
             <span>
@@ -79,25 +81,52 @@ class ProductHome extends Component {
           )
         }
       },
-      {
-        width: 100,
+
+    ];
+    if (this.props.userAuth) {
+      this.columns.push({
+        width: 300,
         title: '操作',
         render: (wo) => {
+          const { status, _id } = wo
+          const newStatus = status % 5 + 1
           return (
             <span>
               {/*将product对象使用state传递给目标路由组件*/}
-              <LinkButton onClick={() => this.showDetail(wo)}>详情</LinkButton>
-              <LinkButton onClick={() => this.showUpdate(wo)}>修改</LinkButton>
+              {this.getNextOption(wo)}
             </span>
           )
         }
-      },
-    ];
+      })
+    }
+  }
+
+
+  getNextOption = (wo) => {
+    switch (wo.status) {
+      case 0: return <><Button type="primary" onClick={() => this.changeWoStatus(wo, 2)}>拒绝订单</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={() => this.changeWoStatus(wo, 1)} type="primary">接收订单</Button></>
+      case 1: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 3)}>进行订单服务</Button>
+      case 3: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 4)}>完成订单服务</Button>
+      default: return <Button type="primary" disabled>订单已完成</Button>
+    }
+  }
+
+  changeWoStatus = async (wo, nextStatus) => {
+    console.log(wo)
+    if (nextStatus === 2) {
+      let result = await reqDelectWo(wo._id);
+      if (result.status === 0) {
+        message.success('订单已经被拒绝')
+        this.getAllWo(1)
+      }
+    } else {
+
+    }
   }
 
   /*
-  显示商品详情界面
-    */
+显示商品详情界面
+  */
   showDetail = (wo) => {
     // 缓存product对象 ==> 给detail组件使用
     memoryUtils.wo = wo
@@ -133,6 +162,7 @@ class ProductHome extends Component {
     if (result.status === 0) {
       // 取出分页数据, 更新状态, 显示分页列表
       const { total, list } = result.data
+      console.log('list ', list)
       this.setState({
         total,
         wos: list
@@ -152,12 +182,14 @@ class ProductHome extends Component {
   // }
 
   componentWillMount() {
+    //  const { getUserAuth, user: { role_id } } = this.props;
     this.initColumns()
+    // getUserAuth(role_id);
   }
 
   componentDidMount() {
+
     this.getAllWo(1)
-    reqUserRole(this.props.user.role_id)
   }
 
   render() {
@@ -214,4 +246,6 @@ class ProductHome extends Component {
   }
 }
 
-export default connect(state => ({ user: state.user }))(ProductHome);
+export default connect(
+  state => ({ user: state.user, userAuth: state.userAuth })
+)(ProductHome);

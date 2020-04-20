@@ -1,7 +1,7 @@
 /*
 用来根据老的state和指定的action生成并返回新的state的函数
  */
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 
 /*
 用来管理头部标题的reducer函数
@@ -11,7 +11,8 @@ import {
   SET_HEAD_TITLE,
   RECEIVE_USER,
   SHOW_ERROR_MSG,
-  RESET_USER
+  RESET_USER,
+  RECEIVE_AUTH
 } from './action-types'
 
 const initHeadTitle = ''
@@ -37,7 +38,7 @@ function user(state = initUser, action) {
     case SHOW_ERROR_MSG:
       const errorMsg = action.errorMsg
       // state.errorMsg = errorMsg  // 不要直接修改原本状态数据
-      return {...state, errorMsg}
+      return { ...state, errorMsg }
     case RESET_USER:
       return {}
     default:
@@ -45,6 +46,16 @@ function user(state = initUser, action) {
   }
 }
 
+
+const initAuth = storageUtils.getUserAuth()
+function userAuth(state = initAuth, action) {
+  switch (action.type) {
+    case RECEIVE_AUTH:
+      return action.auth
+    default:
+      return state
+  }
+}
 /*
 向外默认暴露的是合并产生的总的reducer函数
 管理的总的state的结构:
@@ -55,5 +66,6 @@ function user(state = initUser, action) {
  */
 export default combineReducers({
   headTitle,
-  user
+  user,
+  userAuth
 })

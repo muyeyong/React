@@ -7,9 +7,10 @@ import {
   SET_HEAD_TITLE,
   RECEIVE_USER,
   SHOW_ERROR_MSG,
-  RESET_USER
+  RESET_USER,
+  RECEIVE_AUTH
 } from './action-types'
-import { reqLogin } from '../api'
+import { reqLogin, reqUserRole } from '../api'
 import storageUtils from "../utils/storageUtils";
 
 /*
@@ -36,7 +37,8 @@ export const logout = () => {
   // 返回action对象
   return { type: RESET_USER }
 }
-
+// 获取用户权
+export const receiveAuth = (auth) => ({ type: RECEIVE_AUTH, auth })
 /*
 登陆的异步action
  */
@@ -51,6 +53,26 @@ export const login = (username, password) => {
       storageUtils.saveUser(user)
       // 分发接收用户的同步action
       dispatch(receiveUser(user))
+    } else { // 2.2. 如果失败, 分发失败的同步action
+      const msg = result.msg
+      // message.error(msg)
+      dispatch(showErrorMsg(msg))
+    }
+
+  }
+}
+
+export const getUserAuth = (role_id) => {
+  return async dispatch => {
+    // 1. 执行异步ajax请求
+    const result = await reqUserRole(role_id)  // {status: 0, data: user} {status: 1, msg: 'xxx'}
+    // 2.1. 如果成功, 分发成功的同步action
+    if (result.status === 0) {
+      const auth = result.hasAuth
+      // 保存local中
+      storageUtils.saveUserAuth(auth)
+      // 分发接收用户的同步action
+      dispatch(receiveAuth(auth))
     } else { // 2.2. 如果失败, 分发失败的同步action
       const msg = result.msg
       // message.error(msg)

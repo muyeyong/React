@@ -8,13 +8,14 @@ import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { login } from '../../redux/actions';
+import { login, getUserAuth } from '../../redux/actions';
 
 
 class Login extends Component {
 
     handleSubmit = async value => {
         this.props.login(value.username, value.password);
+
     }
 
 
@@ -68,7 +69,7 @@ class Login extends Component {
 
 export default connect(
     state => ({ user: state.user }),
-    { login }
+    { login, getUserAuth }
 )(Login)
 
 

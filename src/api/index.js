@@ -45,7 +45,9 @@ export const reqCategoryInfo = (parentId, userId) => ajax('/manage/wo/list', { p
 
 export const reqAllWo = (pageNum, pageSize, userId) => ajax('/manage/wo/all', { pageNum, pageSize, userId });
 
-export const reqAddOrUpdateWo = (wo) => ajax('/manage/product/add', wo, 'POST')
+export const reqAddOrUpdateWo = (wo) => ajax('/manage/product/add', wo, 'POST');
+
+export const reqDelectWo = (woId) => ajax('/manage/wo/delete', { woId }, 'POST')
 
 export const reqDeleteImg = (name) => ajax('/manage/img/delete', { name }, 'POST')
 
@@ -66,5 +68,5 @@ export const reqDeleteUser = (userId) => ajax('/manage/user/delete', { userId },
 // 添加/更新用户
 export const reqAddOrUpdateUser = (user) => ajax('/manage/user/' + (user._id ? 'update' : 'add'), user, 'POST');
 
-export const reqUserRole = (roleId) => ajax('/manage/user/auth', roleId);
+export const reqUserRole = (roleId) => ajax('/manage/user/auth', { roleId });
 
