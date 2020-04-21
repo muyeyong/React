@@ -49,9 +49,15 @@ export const reqAddOrUpdateWo = (wo) => ajax('/manage/product/add', wo, 'POST');
 
 export const reqDelectWo = (woId) => ajax('/manage/wo/delete', { woId }, 'POST')
 
+export const reqUpdateWoStatus = (woId, status) => ajax('/manage/wo/updateStatus', { woId, status }, 'POST')
+
 export const reqDeleteImg = (name) => ajax('/manage/img/delete', { name }, 'POST')
 
-export const reqSearchProducts = () => { }
+export const reqSearchWos = ({ pageNum, pageSize, searchName, searchType }) => ajax('/manage/wo/search', {
+    pageNum,
+    pageSize,
+    [searchType]: searchName,
+})
 
 export const reqCategory = () => { }
 

@@ -4,19 +4,16 @@ import {
   Select,
   Input,
   Button,
-  Icon,
   Table,
   message
 } from 'antd'
 
-import LinkButton from '../../components/link-button'
-import { reqSearchProducts, reqUpdateStatus, reqAllWo, reqUserRole, reqAddOrUpdateWo, reqDelectWo } from '../../api'
+import { reqSearchWos, reqAllWo, reqDelectWo, reqUpdateWoStatus } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 import memoryUtils from "../../utils/memoryUtils";
 import statusUtils from '../../utils/statusUtils'
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { getUserAuth } from '../../redux/actions';
 import { Link } from 'react-router-dom'
 const Option = Select.Option
 
@@ -30,7 +27,7 @@ class ProductHome extends Component {
     wos: [], // 商品的数组
     loading: false, // 是否正在加载中
     searchName: '', // 搜索的关键字
-    searchType: 'productName', // 根据哪个字段搜索
+    searchType: 'woId', // 根据哪个字段搜索
   }
 
   /*
@@ -67,15 +64,9 @@ class ProductHome extends Component {
         // dataIndex: 'status',
         render: (wo) => {
           const { status, _id } = wo
-          const newStatus = status % 5 + 1
+
           return (
             <span>
-              {/* <Button
-                type='primary'
-                onClick={() => this.updateStatus(_id, newStatus)}
-              >
-                {status===1 ? '下架' : '上架'}
-              </Button> */}
               <span>{statusUtils.getWoStatus(status)}</span>
             </span>
           )
@@ -88,11 +79,8 @@ class ProductHome extends Component {
         width: 300,
         title: '操作',
         render: (wo) => {
-          const { status, _id } = wo
-          const newStatus = status % 5 + 1
           return (
             <span>
-              {/*将product对象使用state传递给目标路由组件*/}
               {this.getNextOption(wo)}
             </span>
           )
@@ -112,15 +100,20 @@ class ProductHome extends Component {
   }
 
   changeWoStatus = async (wo, nextStatus) => {
-    console.log(wo)
     if (nextStatus === 2) {
       let result = await reqDelectWo(wo._id);
       if (result.status === 0) {
         message.success('订单已经被拒绝')
-        this.getAllWo(1)
+        this.getWos(1)
       }
     } else {
-
+      let result = await reqUpdateWoStatus(wo._id, nextStatus);
+      if (result.status === 0) {
+        message.success('订单状态更新成功');
+        this.getWos(1)
+      } else {
+        message.error(result.msg);
+      }
     }
   }
 
@@ -145,7 +138,7 @@ class ProductHome extends Component {
   /*
   获取指定页码的列表数据显示
    */
-  getAllWo = async (pageNum) => {
+  getWos = async (pageNum) => {
     this.pageNum = pageNum // 保存pageNum, 让其它方法可以看到
     this.setState({ loading: true }) // 显示loading
 
@@ -153,7 +146,7 @@ class ProductHome extends Component {
     // 如果搜索关键字有值, 说明我们要做搜索分页
     let result
     if (searchName) {
-      result = await reqSearchProducts({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
+      result = await reqSearchWos({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
     } else { // 一般分页请求
       result = await reqAllWo(pageNum, PAGE_SIZE, this.props.user._id)
     }
@@ -162,7 +155,6 @@ class ProductHome extends Component {
     if (result.status === 0) {
       // 取出分页数据, 更新状态, 显示分页列表
       const { total, list } = result.data
-      console.log('list ', list)
       this.setState({
         total,
         wos: list
@@ -170,31 +162,19 @@ class ProductHome extends Component {
     }
   }
 
-  /*
-  更新指定商品的状态
-   */
-  // updateStatus = async (productId, status) => {
-  //   const result = await reqUpdateStatus(productId, status)
-  //   if(result.status===0) {
-  //     message.success('更新商品成功')
-  //     this.getProducts(this.pageNum)
-  //   }
-  // }
+
 
   componentWillMount() {
-    //  const { getUserAuth, user: { role_id } } = this.props;
     this.initColumns()
-    // getUserAuth(role_id);
   }
 
   componentDidMount() {
 
-    this.getAllWo(1)
+    this.getWos(1)
   }
 
   render() {
 
-    // 取出状态数据
     const { wos, total, loading, searchType, searchName } = this.state
 
 
@@ -206,8 +186,8 @@ class ProductHome extends Component {
           style={{ width: 150 }}
           onChange={value => this.setState({ searchType: value })}
         >
-          <Option value='productName'>按名称搜索</Option>
-          <Option value='productDesc'>按描述搜索</Option>
+          <Option value='woId'>按单号搜索</Option>
+          <Option value='woDesc'>按描述搜索</Option>
         </Select>
         <Input
           placeholder='关键字'
@@ -215,7 +195,7 @@ class ProductHome extends Component {
           value={searchName}
           onChange={event => this.setState({ searchName: event.target.value })}
         />
-        <Button type='primary' onClick={() => this.getProducts(1)}>搜索</Button>
+        <Button type='primary' onClick={() => this.getWos(1)}>搜索</Button>
       </span>
     )
 
@@ -238,7 +218,7 @@ class ProductHome extends Component {
             total,
             defaultPageSize: PAGE_SIZE,
             showQuickJumper: true,
-            onChange: this.getProducts
+            onChange: this.getWos
           }}
         />
       </Card>
