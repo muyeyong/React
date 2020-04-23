@@ -14,12 +14,11 @@ import memoryUtils from "../../utils/memoryUtils";
 import statusUtils from '../../utils/statusUtils'
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import LinkButton from '../../components/link-button'
+
 const Option = Select.Option
 
-/*
-Product的默认子路由组件
- */
 class ProductHome extends Component {
 
   state = {
@@ -38,6 +37,9 @@ class ProductHome extends Component {
       {
         title: '单号',
         dataIndex: 'woId',
+        render: (woId) => {
+
+        }
       },
       {
         title: '服务地址',
@@ -56,15 +58,13 @@ class ProductHome extends Component {
       {
         title: '费用',
         dataIndex: 'cost',
-        render: (cost) => '¥' + cost  // 当前指定了对应的属性, 传入的是对应的属性值
+        render: (cost) => '¥' + cost
       },
       {
         width: 200,
         title: '订单状态',
-        // dataIndex: 'status',
         render: (wo) => {
-          const { status, _id } = wo
-
+          const { status } = wo
           return (
             <span>
               <span>{statusUtils.getWoStatus(status)}</span>
