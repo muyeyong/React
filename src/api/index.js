@@ -59,7 +59,7 @@ export const reqSearchWos = ({ pageNum, pageSize, searchName, searchType }) => a
     [searchType]: searchName,
 })
 
-export const reqCategory = () => { }
+export const reqCategory = categoryId => ajax('/manage/category/info', { categoryId })
 
 export const reqRoles = () => ajax('/manage/role/list')
 // 添加角色

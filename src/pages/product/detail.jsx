@@ -9,6 +9,7 @@ import LinkButton from '../../components/link-button'
 import { BASE_IMG_URL } from '../../utils/constants'
 import { reqCategory } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
+import { RollbackOutlined } from '@ant-design/icons';
 
 const Item = List.Item
 
@@ -26,22 +27,23 @@ export default class ProductDetail extends Component {
   async componentDidMount() {
 
     // 得到当前订单的分类ID
-    const { pCategoryId, categoryId } = memoryUtils.product
-    if (pCategoryId === '0') { // 一级分类下的订单
-      const result = await reqCategory(categoryId)
+    const { parentId, selfId } = memoryUtils.wo
+    if (parentId === '0') { // 一级分类下的订单
+      const result = await reqCategory(selfId)
       const cName1 = result.data.name
       this.setState({ cName1 })
     } else { // 二级分类下的订单
       /*
       //通过多个await方式发多个请求: 后面一个请求是在前一个请求成功返回之后才发送
-      const result1 = await reqCategory(pCategoryId) // 获取一级分类列表
-      const result2 = await reqCategory(categoryId) // 获取二级分类
+      const result1 = await reqCategory(parentId) // 获取一级分类列表
+      const result2 = await reqCategory(selfId) // 获取二级分类
       const cName1 = result1.data.name
       const cName2 = result2.data.name
       */
 
       // 一次性发送多个请求, 只有都成功了, 才正常处理
-      const results = await Promise.all([reqCategory(pCategoryId), reqCategory(categoryId)])
+      const results = await Promise.all([reqCategory(parentId), reqCategory(selfId)])
+      console.log(results)
       const cName1 = results[0].data.name
       const cName2 = results[1].data.name
       this.setState({
@@ -63,17 +65,20 @@ export default class ProductDetail extends Component {
   render() {
 
     // 读取携带过来的state数据
-    const { name, desc, price, detail, imgs } = memoryUtils.product
+    const { woId, cost, detail, imgs } = memoryUtils.wo
     const { cName1, cName2 } = this.state
-
+    console.log(memoryUtils.wo)
     const title = (
       <span>
         <LinkButton>
-          <Icon
+          {/* <Icon
             type='arrow-left'
             style={{ marginRight: 10, fontSize: 20 }}
             onClick={() => this.props.history.goBack()}
-          />
+          /> */}
+          <RollbackOutlined
+            style={{ marginRight: 10, fontSize: 20 }}
+            onClick={() => this.props.history.goBack()} />
         </LinkButton>
 
         <span>订单详情</span>
@@ -83,16 +88,12 @@ export default class ProductDetail extends Component {
       <Card title={title} className='product-detail'>
         <List>
           <Item>
-            <span className="left">订单名称:</span>
-            <span>{name}</span>
-          </Item>
-          <Item>
-            <span className="left">订单描述:</span>
-            <span>{desc}</span>
+            <span className="left">订单号:</span>
+            <span>{woId}</span>
           </Item>
           <Item>
             <span className="left">订单价格:</span>
-            <span>{price}元</span>
+            <span>{cost}元</span>
           </Item>
           <Item>
             <span className="left">所属分类:</span>
@@ -102,7 +103,7 @@ export default class ProductDetail extends Component {
             <span className="left">订单图片:</span>
             <span>
               {
-                imgs.map(img => (
+                imgs && imgs.map(img => (
                   <img
                     key={img}
                     src={BASE_IMG_URL + img}

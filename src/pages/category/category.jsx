@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Button, Table, Card, message, Modal, Form ,Select,Input} from 'antd';
+import { Button, Table, Card, message, Modal, Form, Select, Input } from 'antd';
 import LinkButton from '../../components/link-button';
-import { reqCategorys, reqAddCategory,reqUpdateCategory,reqCategoryInfo} from '../../api/index';
+import { reqCategorys, reqAddCategory, reqUpdateCategory, reqCategoryInfo } from '../../api/index';
 import AddForm from './add-form';
 import UpdateForm from './update-form';
-import {ArrowRightOutlined} from '@ant-design/icons';
-import  memoryUtils  from '../../utils/memoryUtils';
+import { ArrowRightOutlined } from '@ant-design/icons';
 
 const Item = Form.Item
 const Option = Select.Option
@@ -68,50 +67,6 @@ class Category extends Component {
       },
     ];
 
-    // this.subColumns = [
-    //   {
-    //     title: '单号',
-    //     dataIndex: 'woId',
-    //     key: 'woId',
-    //   },
-    //   {
-    //     title: '创建时间',
-    //     dataIndex: 'createTime',
-    //     key: 'createTime',
-    //   },
-    //   {
-    //     title: '截至时间',
-    //     dataIndex: 'deadline',
-    //     key: 'deadline',
-    //   },
-    //   {
-    //     title: '费用',
-    //     dataIndex: 'cost',
-    //     key: 'cost',
-    //     render: (cost)=> '¥' + cost
-    //   },
-    //   {
-    //     title: '订单状态',
-    //     dataIndex: 'status',
-    //     key: 'status',
-    //   },
-    //   {
-    //     title: '下一步操作',
-    //     dataIndex: '',
-    //     width: 300,
-    //     key: 'x',
-    //     render: (category) =>
-    //     <>
-    //       <span>
-    //         <LinkButton >接受订单</LinkButton>
-    //         <LinkButton >拒绝订单</LinkButton> 
-    //       </span>
-    //       <LinkButton >订单完成</LinkButton> 
-    //       </>
-    //     ,
-    //   },
-    // ]
-
   }
 
 
@@ -126,25 +81,25 @@ class Category extends Component {
     this.setState({
       parentId: category._id,
       parentName: category.name
-    }, () => {   
-     this.getCategorys();
+    }, () => {
+      this.getCategorys();
     })
   }
 
 
- 
+
 
   getCategorys = async (parentId) => {
     this.setState({ loading: true });
-     parentId = parentId || this.state.parentId;
+    parentId = parentId || this.state.parentId;
     const result = await reqCategorys(parentId);
     this.setState({ loading: false });
     if (result.status === 0) {
-      if(parentId === '0'){
+      if (parentId === '0') {
         this.setState({
           categorys: result.data
         })
-      }else{
+      } else {
         this.setState({
           subCategorys: result.data
         })
@@ -159,47 +114,47 @@ class Category extends Component {
   }
 
   handleCancel = () => {
-    this.setState({showStatus:0});
+    this.setState({ showStatus: 0 });
   }
 
   addCategory = () => {
-    const {parentId} = this.state;
-     this.form.validateFields().then( async values =>{
+    const { parentId } = this.state;
+    this.form.validateFields().then(async values => {
       this.setState({
         showStatus: 0
       })
-        const {categoryName,price} = values;
-        this.form.resetFields()
-        const result = await reqAddCategory(categoryName ,parentId,price);
-        if(result.status === 0){
-          this.getCategorys();
-        }
-        else{
-          message.error('出了点问题，请稍后再试');
-        }
-     }).catch(error=>{
+      const { categoryName, price } = values;
+      this.form.resetFields()
+      const result = await reqAddCategory(categoryName, parentId, price);
+      if (result.status === 0) {
+        this.getCategorys();
+      }
+      else {
         message.error('出了点问题，请稍后再试');
-     })
-   
+      }
+    }).catch(error => {
+      message.error('出了点问题，请稍后再试');
+    })
+
   }
 
 
   updateCategory = () => {
-     this.form.validateFields().then(async values=>{
-        this.setState({showStatus:0});
-        const categoryId = this.category._id;
-        let {categoryName,price} = values;
-        console.log(price)
-        this.form.resetFields();
-        price = parseFloat(price);
-        console.log(price)
-        const result = await reqUpdateCategory({categoryId,categoryName,price})
-        if (result.status===0) {
-          this.getCategorys()
-        }
-     }).catch(error=>{
-         message.error('出了点问题，请稍后再试');
-     })
+    this.form.validateFields().then(async values => {
+      this.setState({ showStatus: 0 });
+      const categoryId = this.category._id;
+      let { categoryName, price } = values;
+      console.log(price)
+      this.form.resetFields();
+      price = parseFloat(price);
+      console.log(price)
+      const result = await reqUpdateCategory({ categoryId, categoryName, price })
+      if (result.status === 0) {
+        this.getCategorys()
+      }
+    }).catch(error => {
+      message.error('出了点问题，请稍后再试');
+    })
 
   }
 
@@ -210,8 +165,8 @@ class Category extends Component {
   }
 
 
-  handleAddCategory = ()=>{
-     this.addCategory();
+  handleAddCategory = () => {
+    this.addCategory();
   }
 
 
@@ -236,46 +191,46 @@ class Category extends Component {
   render() {
     const { categorys, loading, parentId, parentName, subCategorys, showStatus } = this.state;
     const category = this.category || {};
-    const title = parentId === '0'? '订单类别':(
+    const title = parentId === '0' ? '订单类别' : (
       <span>
-      <LinkButton onClick={this.showCategorys}>一级分类</LinkButton>
-      <ArrowRightOutlined style={{marginRight: 5}} />
-      <span>{parentName}</span>
-    </span>
+        <LinkButton onClick={this.showCategorys}>一级分类</LinkButton>
+        <ArrowRightOutlined style={{ marginRight: 5 }} />
+        <span>{parentName}</span>
+      </span>
     )
     return (
       <Card title={title} extra={<Button type='primary' onClick={this.showAdd}>添加</Button>} >
         <Table
           loading={loading}
           dataSource={parentId === '0' ? categorys : subCategorys}
-          columns={parentId === '0'? this.columns: this.subColumns}
+          columns={parentId === '0' ? this.columns : this.subColumns}
           rowKey="_id"
           bordered
           pagination={{ defaultPageSize: 5, showQuickJumper: true }}
         />
 
-      
 
-          <Modal
-            title="添加分类"
-            visible={showStatus === 1}
-            onOk={this.addCategory}
-            onCancel={this.handleCancel}
-          >
-         <AddForm  setForm={(form) => {this.form = form}}  categorys={categorys} parentId={parentId} /> 
-          </Modal>
-       
+
+        <Modal
+          title="添加分类"
+          visible={showStatus === 1}
+          onOk={this.addCategory}
+          onCancel={this.handleCancel}
+        >
+          <AddForm setForm={(form) => { this.form = form }} categorys={categorys} parentId={parentId} />
+        </Modal>
+
 
         <Modal
           title="更新分类"
-          visible={showStatus===2}
+          visible={showStatus === 2}
           onOk={this.updateCategory}
           onCancel={this.handleCancel}
         >
           <UpdateForm
             categoryName={category.name}
-            parentId = {parentId}
-            setForm={(form) => {this.form = form}}
+            parentId={parentId}
+            setForm={(form) => { this.form = form }}
           />
         </Modal>
 

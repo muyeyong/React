@@ -37,13 +37,16 @@ class ProductHome extends Component {
       {
         title: '单号',
         dataIndex: 'woId',
-        render: (woId) => {
+        render: (woId, wo) => <LinkButton onClick={() => this.showDetail(wo)}>{woId}</LinkButton>
 
-        }
       },
       {
         title: '服务地址',
         dataIndex: 'address'
+      },
+      {
+        title: '服务内容',
+        dataIndex: 'serviceName'
       },
       {
         title: '创建时间',

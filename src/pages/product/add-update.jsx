@@ -134,10 +134,12 @@ class ProductAddUpdate extends PureComponent {
       const createDate = time[0].format('x');
       const deadline = time[1].format('x');
       const parentId = categoryIds[0];
+      const selfId = categoryIds[1];
       const cost = this.state.price;
       const imgs = this.pw.current.getImgs();
       const detail = this.editor.current.getDetail();
-      const wo = { woId, userId, createDate, deadline, parentId, cost, imgs, detail, address };
+      const serviceName = this.getServiceName(parentId, selfId);
+      const wo = { woId, userId, createDate, serviceName, deadline, parentId, selfId, cost, imgs, detail, address };
       const result = await reqAddOrUpdateWo(wo);
       if (result.status === 0) {
         message.success('申请成功');
@@ -151,6 +153,15 @@ class ProductAddUpdate extends PureComponent {
     })
   }
 
+  getServiceName = (parentId, selfId) => {
+    const { options } = this.state;
+    let result = options.find(item => item.value === parentId);
+    let serviceName = result.label;
+    if (result.children) {
+      serviceName = serviceName + '\\' + result.children.find(item => item.value === selfId).label;
+    }
+    return serviceName;
+  }
   onChange = (value, selectedOptions) => {
     this.setState({ price: selectedOptions[selectedOptions.length - 1].price });
   }
