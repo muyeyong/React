@@ -28,7 +28,7 @@ class AddForm extends Component {
 
   render() {
 
-    const { categorys, parentId } = this.props;
+    const { parentId } = this.props;
     return (
       <Form ref={this.formRef}>
         <Item name='categoryName'>

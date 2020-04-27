@@ -19,7 +19,6 @@ import { RollbackOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 
 const { Item } = Form
-const { TextArea } = Input
 const { RangePicker } = DatePicker
 
 /*
@@ -52,7 +51,7 @@ class ProductAddUpdate extends PureComponent {
     // 如果是一个二级分类商品的更新
     const { isUpdate, wo } = this
     const { pCategoryId } = wo
-    if (isUpdate && pCategoryId !== '0') {
+    if (pCategoryId && isUpdate && pCategoryId !== '0') {
       // 获取对应的二级分类列表
       const subCategorys = await this.getCategorys(pCategoryId)
       // 生成二级下拉列表的options

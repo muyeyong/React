@@ -47,7 +47,9 @@ export const reqAllWo = (pageNum, pageSize, userId) => ajax('/manage/wo/all', { 
 
 export const reqAddOrUpdateWo = (wo) => ajax('/manage/product/add', wo, 'POST');
 
-export const reqDelectWo = (woId) => ajax('/manage/wo/delete', { woId }, 'POST')
+export const reqDelectWo = (woId) => ajax('/manage/wo/delete', { woId }, 'POST');
+
+export const reqWo = _id => ajax('/manage/wo/one', { _id });
 
 export const reqUpdateWoStatus = (woId, status) => ajax('/manage/wo/updateStatus', { woId, status }, 'POST')
 

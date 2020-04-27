@@ -144,10 +144,8 @@ class Category extends Component {
       this.setState({ showStatus: 0 });
       const categoryId = this.category._id;
       let { categoryName, price } = values;
-      console.log(price)
       this.form.resetFields();
       price = parseFloat(price);
-      console.log(price)
       const result = await reqUpdateCategory({ categoryId, categoryName, price })
       if (result.status === 0) {
         this.getCategorys()
@@ -200,6 +198,7 @@ class Category extends Component {
     )
     return (
       <Card title={title} extra={<Button type='primary' onClick={this.showAdd}>添加</Button>} >
+
         <Table
           loading={loading}
           dataSource={parentId === '0' ? categorys : subCategorys}
@@ -208,8 +207,6 @@ class Category extends Component {
           bordered
           pagination={{ defaultPageSize: 5, showQuickJumper: true }}
         />
-
-
 
         <Modal
           title="添加分类"

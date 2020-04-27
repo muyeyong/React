@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import {
   Card,
-  Icon,
   List
 } from 'antd'
 
 import LinkButton from '../../components/link-button'
 import { BASE_IMG_URL } from '../../utils/constants'
-import { reqCategory } from '../../api'
+import { reqCategory, reqWo } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
+import woUtils from '../../utils/woUtils';
 import { RollbackOutlined } from '@ant-design/icons';
+import { connect } from 'react-redux';
 
 const Item = List.Item
 
@@ -17,40 +18,66 @@ const Item = List.Item
 /*
 Product的详情子路由组件
  */
-export default class ProductDetail extends Component {
+class ProductDetail extends Component {
 
   state = {
-    cName1: '', // 一级分类名称
-    cName2: '', // 二级分类名称
+    wo: {}
+  }
+
+  async componentWillMount() {
+
+    if (!memoryUtils.wo.woId) {
+      let history = woUtils.getStoreHistory();
+      if (history._id) {
+        let result = await reqWo(history._id);
+        if (result.status === 0) {
+          this.setState({ wo: result.data });
+        }
+      }
+    } else {
+      woUtils.setStoreHistory({ _id: memoryUtils.wo._id })
+      this.setState({ wo: memoryUtils.wo })
+    }
+
   }
 
   async componentDidMount() {
 
     // 得到当前订单的分类ID
-    const { parentId, selfId } = memoryUtils.wo
-    if (parentId === '0') { // 一级分类下的订单
-      const result = await reqCategory(selfId)
-      const cName1 = result.data.name
-      this.setState({ cName1 })
-    } else { // 二级分类下的订单
-      /*
-      //通过多个await方式发多个请求: 后面一个请求是在前一个请求成功返回之后才发送
-      const result1 = await reqCategory(parentId) // 获取一级分类列表
-      const result2 = await reqCategory(selfId) // 获取二级分类
-      const cName1 = result1.data.name
-      const cName2 = result2.data.name
-      */
+    // if (!memoryUtils.wo.woId) {
+    //   let history = woUtils.getStoreHistory();
+    //   if (history._id) {
+    //     let result = await reqWo(history._id);
+    //     if (result.status === 0) {
+    //       memoryUtils.wo = result.data;
+    //     }
+    //   }
+    // } else {
+    //   woUtils.setStoreHistory({ _id: memoryUtils.wo._id })
+    // }
+    // const { parentId, selfId } = memoryUtils.wo
+    // if (parentId === '0') { // 一级分类下的订单
+    //   const result = await reqCategory(selfId)
+    //   const cName1 = result.data.name
+    //   this.setState({ cName1 })
+    // } else { // 二级分类下的订单
+    //   /*
+    //   //通过多个await方式发多个请求: 后面一个请求是在前一个请求成功返回之后才发送
+    //   const result1 = await reqCategory(parentId) // 获取一级分类列表
+    //   const result2 = await reqCategory(selfId) // 获取二级分类
+    //   const cName1 = result1.data.name
+    //   const cName2 = result2.data.name
+    //   */
 
-      // 一次性发送多个请求, 只有都成功了, 才正常处理
-      const results = await Promise.all([reqCategory(parentId), reqCategory(selfId)])
-      console.log(results)
-      const cName1 = results[0].data.name
-      const cName2 = results[1].data.name
-      this.setState({
-        cName1,
-        cName2
-      })
-    }
+    //   // 一次性发送多个请求, 只有都成功了, 才正常处理
+    //   const results = await Promise.all([reqCategory(parentId), reqCategory(selfId)])
+    //   const cName1 = results[0].data ? results[0].data.name : ''
+    //   const cName2 = results[1].data ? results[1].data.name : ''
+    //   this.setState({
+    //     cName1,
+    //     cName2
+    //   })
+    // }
 
   }
 
@@ -65,9 +92,7 @@ export default class ProductDetail extends Component {
   render() {
 
     // 读取携带过来的state数据
-    const { woId, cost, detail, imgs } = memoryUtils.wo
-    const { cName1, cName2 } = this.state
-    console.log(memoryUtils.wo)
+    const { woId, cost, detail, imgs, serviceName } = this.state.wo
     const title = (
       <span>
         <LinkButton>
@@ -92,12 +117,20 @@ export default class ProductDetail extends Component {
             <span>{woId}</span>
           </Item>
           <Item>
+            <span className="left">客户姓名</span>
+            <span>{this.props.user.username}</span>
+          </Item>
+          <Item>
+            <span className="left">联系方式</span>
+            <span>{this.props.user.phone}</span>
+          </Item>
+          <Item>
             <span className="left">订单价格:</span>
             <span>{cost}元</span>
           </Item>
           <Item>
             <span className="left">所属分类:</span>
-            <span>{cName1} {cName2 ? ' --> ' + cName2 : ''}</span>
+            <span>{serviceName}</span>
           </Item>
           <Item>
             <span className="left">订单图片:</span>
@@ -125,3 +158,7 @@ export default class ProductDetail extends Component {
     )
   }
 }
+
+export default connect(
+  state => ({ user: state.user })
+)(ProductDetail)
