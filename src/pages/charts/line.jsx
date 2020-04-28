@@ -1,11 +1,32 @@
 import React, { Component } from 'react'
 import { Card, Button } from 'antd'
 import ReactEcharts from 'echarts-for-react'
+import { reqCategory, reqWoList } from '../../api';
 
 /*
 后台管理的折线图路由组件
  */
 export default class Line extends Component {
+
+    state = {
+        categorys: [],
+        wosNamber: []
+    }
+
+    componentDidMount() {
+        this.getData();
+    }
+
+    getData = async () => {
+        let result = await reqCategory(0);
+        if (result.status === 0) {
+            let categorys = result.data;
+            let categorysId = categorys.map(item => item._id);
+
+            let wosNumber = await reqWoList(categorysId);
+
+        }
+    }
 
     state = {
         sales: [5, 20, 36, 10, 10, 20], // 销量的数组

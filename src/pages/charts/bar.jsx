@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
-import { Card, Button } from 'antd'
-import ReactEcharts from 'echarts-for-react'
+import React, { Component } from 'react';
+import { Card, Button } from 'antd';
+import ReactEcharts from 'echarts-for-react';
+import { reqCategorys, reqWoList } from '../../api';
 
 /*
 后台管理的柱状图路由组件
@@ -9,8 +10,28 @@ export default class Bar extends Component {
 
     state = {
         sales: [5, 20, 36, 10, 10, 20], // 销量的数组
-        stores: [6, 10, 25, 20, 15, 10], // 库存的数组
+        stores: [6, 10, 25, 20, 15, 10], // 库存的数组,
+        categorys: [],
+        wosNamber: []
     }
+
+
+    componentDidMount() {
+        this.getData();
+    }
+
+    getData = async () => {
+        let result = await reqCategorys('0');
+        if (result.status === 0) {
+            let categorys = result.data;
+            let categorysId = categorys && categorys.map(item => item._id);
+            console.log(categorysId)
+            let wosNumber = await reqWoList(JSON.stringify(categorysId));
+            console.log(wosNumber)
+
+        }
+    }
+
 
     update = () => {
         this.setState(state => ({

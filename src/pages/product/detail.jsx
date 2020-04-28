@@ -26,6 +26,23 @@ class ProductDetail extends Component {
 
   async componentWillMount() {
 
+    // if (!memoryUtils.wo.woId) {
+    //   let history = woUtils.getStoreHistory();
+    //   if (history._id) {
+    //     let result = await reqWo(history._id);
+    //     if (result.status === 0) {
+    //       this.setState({ wo: result.data });
+    //     }
+    //   }
+    // } else {
+    //   woUtils.setStoreHistory({ _id: memoryUtils.wo._id })
+    //   this.setState({ wo: memoryUtils.wo })
+    // }
+
+  }
+
+  async componentDidMount() {
+
     if (!memoryUtils.wo.woId) {
       let history = woUtils.getStoreHistory();
       if (history._id) {
@@ -39,22 +56,7 @@ class ProductDetail extends Component {
       this.setState({ wo: memoryUtils.wo })
     }
 
-  }
 
-  async componentDidMount() {
-
-    // 得到当前订单的分类ID
-    // if (!memoryUtils.wo.woId) {
-    //   let history = woUtils.getStoreHistory();
-    //   if (history._id) {
-    //     let result = await reqWo(history._id);
-    //     if (result.status === 0) {
-    //       memoryUtils.wo = result.data;
-    //     }
-    //   }
-    // } else {
-    //   woUtils.setStoreHistory({ _id: memoryUtils.wo._id })
-    // }
     // const { parentId, selfId } = memoryUtils.wo
     // if (parentId === '0') { // 一级分类下的订单
     //   const result = await reqCategory(selfId)
@@ -96,11 +98,6 @@ class ProductDetail extends Component {
     const title = (
       <span>
         <LinkButton>
-          {/* <Icon
-            type='arrow-left'
-            style={{ marginRight: 10, fontSize: 20 }}
-            onClick={() => this.props.history.goBack()}
-          /> */}
           <RollbackOutlined
             style={{ marginRight: 10, fontSize: 20 }}
             onClick={() => this.props.history.goBack()} />

@@ -51,6 +51,8 @@ export const reqDelectWo = (woId) => ajax('/manage/wo/delete', { woId }, 'POST')
 
 export const reqWo = _id => ajax('/manage/wo/one', { _id });
 
+export const reqWoList = parentIds => ajax('/manage/wo/count', { parentIds });
+
 export const reqUpdateWoStatus = (woId, status) => ajax('/manage/wo/updateStatus', { woId, status }, 'POST')
 
 export const reqDeleteImg = (name) => ajax('/manage/img/delete', { name }, 'POST')
@@ -61,7 +63,8 @@ export const reqSearchWos = ({ pageNum, pageSize, searchName, searchType }) => a
     [searchType]: searchName,
 })
 
-export const reqCategory = categoryId => ajax('/manage/category/info', { categoryId })
+export const reqCategory = categoryId => ajax('/manage/category/info', { categoryId });
+
 
 export const reqRoles = () => ajax('/manage/role/list')
 // 添加角色
