@@ -5,8 +5,7 @@ import {
   Input,
   Button,
   Table,
-  message,
-  Tag
+  message
 } from 'antd'
 
 import { reqSearchWos, reqAllWo, reqDelectWo, reqUpdateWoStatus } from '../../api'
@@ -19,7 +18,7 @@ import LinkButton from '../../components/link-button'
 
 const Option = Select.Option
 
-class ProductHome extends Component {
+class serviceSquare extends Component {
 
   state = {
     total: 0, // 商品的总数量
@@ -37,7 +36,7 @@ class ProductHome extends Component {
       {
         title: '单号',
         dataIndex: 'woId',
-        render: (woId, wo) => <><LinkButton onClick={() => this.showDetail(wo)}>{woId}</LinkButton> {wo.userId === this.props.user._id ? <Tag color='success'>我申请的订单</Tag> : ''}{wo.serviceStaffId === this.props.user._id ? <Tag color='processing'>我服务的订单</Tag> : ''}</>
+        render: (woId, wo) => <LinkButton onClick={() => this.showDetail(wo)}>{woId}</LinkButton>
 
       },
       {
@@ -49,7 +48,7 @@ class ProductHome extends Component {
         dataIndex: 'serviceName'
       },
       {
-        title: '开始时间',
+        title: '创建时间',
         dataIndex: 'createDate',
         render: (createDate) => moment(createDate).format('YYYY-MM-DD HH:mm:ss')
       },
@@ -205,14 +204,10 @@ class ProductHome extends Component {
       </span>
     )
 
-    const extra = (
-      <Button type='primary' onClick={() => this.props.history.push('/product/addupdate')}>
-        申请服务
-      </Button>
-    )
+
 
     return (
-      <Card title={title} extra={extra}>
+      <Card title={title}>
         <Table
           bordered
           rowKey='_id'
@@ -234,4 +229,4 @@ class ProductHome extends Component {
 
 export default connect(
   state => ({ user: state.user, userAuth: state.userAuth })
-)(ProductHome);
+)(serviceSquare);

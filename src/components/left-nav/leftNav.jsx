@@ -14,7 +14,8 @@ import {
     PieChartOutlined,
     UserOutlined,
     AreaChartOutlined,
-    InsuranceOutlined
+    InsuranceOutlined,
+    RedEnvelopeOutlined
 } from '@ant-design/icons';
 import Line from '../../pages/charts/line';
 import { connect } from 'react-redux';
@@ -46,6 +47,8 @@ export class leftNav extends Component {
                 return <AreaChartOutlined />
             case 'InsuranceOutlined':
                 return <InsuranceOutlined />
+            case 'RedEnvelopeOutlined':
+                return <RedEnvelopeOutlined />
             default:
                 break;
         }

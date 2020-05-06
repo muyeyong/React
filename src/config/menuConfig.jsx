@@ -54,6 +54,11 @@ export const menuList = [
                 key: '/charts/line'
             }
         ]
+    },
+    {
+        title: '接单广场',
+        icon: 'RedEnvelopeOutlined',
+        key: '/service/square'
     }
 
 ]

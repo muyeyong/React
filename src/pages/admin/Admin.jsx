@@ -11,6 +11,7 @@ import User from '../user/user';
 import Product from '../product/product';
 import Role from '../role/role';
 import Home from '../Home/home';
+import ServiceSquare from '../serviceSquare/index';
 import { connect } from 'react-redux';
 
 const { Sider, Content, Footer } = Layout
@@ -34,6 +35,7 @@ class Admin extends Component {
                             <Route path='/charts/pie' component={Pie}></Route>
                             <Route path='/charts/line' component={Line}></Route>
                             <Route path='/charts/bar' component={Bar}></Route>
+                            <Route path='/service/square' component={ServiceSquare}></Route>
                             <Redirect to='/home'></Redirect>
                         </Switch>
                     </Content>

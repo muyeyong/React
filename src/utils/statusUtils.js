@@ -1,5 +1,6 @@
 export default {
-  getWoStatus(statusId) {
+  getWoStatus(statusId, deadline) {
+    if (deadline < Date.now()) return '订单已过期'
     switch (statusId) {
       case 0: return '等待接收订单'
       case 1: return '订单已经接收'

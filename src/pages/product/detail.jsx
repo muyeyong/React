@@ -149,7 +149,6 @@ class ProductDetail extends Component {
             <span dangerouslySetInnerHTML={{ __html: detail }}>
             </span>
           </Item>
-
         </List>
       </Card>
     )
