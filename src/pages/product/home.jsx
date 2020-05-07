@@ -37,7 +37,7 @@ class ProductHome extends Component {
       {
         title: '单号',
         dataIndex: 'woId',
-        render: (woId, wo) => <><LinkButton onClick={() => this.showDetail(wo)}>{woId}</LinkButton> {wo.userId === this.props.user._id ? <Tag color='success'>我申请的订单</Tag> : ''}{wo.serviceStaffId === this.props.user._id ? <Tag color='processing'>我服务的订单</Tag> : ''}</>
+        render: (woId, wo) => <><LinkButton onClick={() => this.showDetail(wo)}>{woId}</LinkButton> {wo.userId === this.props.user._id ? <Tag color='success'>申请的订单</Tag> : ''}{wo.serviceStaffId === this.props.user._id ? <Tag color='processing'>服务的订单</Tag> : ''}</>
 
       },
       {
@@ -94,13 +94,12 @@ class ProductHome extends Component {
 
 
   getNextOption = (wo) => {
-    // if(wo.deadline < new Date())
-    // console.log('time ', Date.now())
     if (wo.deadline < Date.now()) return <><Button type="primary" disabled>订单已过期</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={() => this.changeWoStatus(wo, 2)} type="primary">删除订单</Button></>
     switch (wo.status) {
       case 0: return <><Button type="primary" onClick={() => this.changeWoStatus(wo, 2)}>拒绝订单</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={() => this.changeWoStatus(wo, 1)} type="primary">接收订单</Button></>
-      case 1: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 3)}>进行订单服务</Button>
-      case 3: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 4)}>完成订单服务</Button>
+      case 1: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 3)} disabled={!this.props.userAuth}>订单派送中</Button>
+      case 2: return <Button type="primary" disabled>订单已被拒绝</Button>
+      case 3: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 4)}>进行订单服务</Button>
       default: return <Button type="primary" disabled>订单已完成</Button>
     }
   }
@@ -168,14 +167,11 @@ class ProductHome extends Component {
     }
   }
 
-
-
   componentWillMount() {
     this.initColumns()
   }
 
   componentDidMount() {
-
     this.getWos(1)
   }
 
@@ -235,3 +231,5 @@ class ProductHome extends Component {
 export default connect(
   state => ({ user: state.user, userAuth: state.userAuth })
 )(ProductHome);
+
+

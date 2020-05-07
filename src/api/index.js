@@ -51,6 +51,8 @@ export const reqDelectWo = (woId) => ajax('/manage/wo/delete', { woId }, 'POST')
 
 export const reqWo = _id => ajax('/manage/wo/one', { _id });
 
+export const reqServiceWo = () => ajax('/manage/wo/serviceWo')
+
 export const reqWoList = parentIds => ajax('/manage/wo/count', { parentIds });
 
 export const reqUpdateWoStatus = (woId, status) => ajax('/manage/wo/updateStatus', { woId, status }, 'POST')

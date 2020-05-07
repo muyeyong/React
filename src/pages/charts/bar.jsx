@@ -15,6 +15,7 @@ export default class Bar extends Component {
 
 
     componentDidMount() {
+
         this.getData();
     }
 
