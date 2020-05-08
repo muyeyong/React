@@ -8,7 +8,7 @@ import {
   message
 } from 'antd'
 
-import { reqSearchWos, reqAllWo, reqDelectWo, reqUpdateWoStatus } from '../../api'
+import { reqUpdateWoStatus, reqServiceWos, reqSearchServiceWos } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 import memoryUtils from "../../utils/memoryUtils";
 import statusUtils from '../../utils/statusUtils'
@@ -25,7 +25,7 @@ class serviceSquare extends Component {
     wos: [], // 商品的数组
     loading: false, // 是否正在加载中
     searchName: '', // 搜索的关键字
-    searchType: 'woId', // 根据哪个字段搜索
+    searchType: 'address', // 根据哪个字段搜索
   }
 
   /*
@@ -58,26 +58,11 @@ class serviceSquare extends Component {
         render: (deadline) => moment(deadline).format('YYYY-MM-DD HH:mm:ss')
       },
       {
-        title: '费用',
+        title: '订单价格',
         dataIndex: 'cost',
         render: (cost) => '¥' + cost
       },
       {
-        width: 200,
-        title: '订单状态',
-        render: (wo) => {
-          const { status, deadline } = wo
-          return (
-            <span>
-              <span>{statusUtils.getWoStatus(status, deadline)}</span>
-            </span>
-          )
-        }
-      },
-
-    ];
-    if (this.props.userAuth) {
-      this.columns.push({
         width: 300,
         title: '操作',
         render: (wo) => {
@@ -87,38 +72,22 @@ class serviceSquare extends Component {
             </span>
           )
         }
-      })
-    }
+      }
+    ];
   }
 
 
   getNextOption = (wo) => {
-    // if(wo.deadline < new Date())
-    // console.log('time ', Date.now())
-    if (wo.deadline < Date.now()) return <><Button type="primary" disabled>订单已过期</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={() => this.changeWoStatus(wo, 2)} type="primary">删除订单</Button></>
-    switch (wo.status) {
-      case 0: return <><Button type="primary" onClick={() => this.changeWoStatus(wo, 2)}>拒绝订单</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={() => this.changeWoStatus(wo, 1)} type="primary">接收订单</Button></>
-      case 1: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 3)}>进行订单服务</Button>
-      case 3: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 4)}>完成订单服务</Button>
-      default: return <Button type="primary" disabled>订单已完成</Button>
-    }
+    return <Button type="primary" onClick={() => this.changeWoStatus(wo, 3)}>接单</Button>
   }
 
   changeWoStatus = async (wo, nextStatus) => {
-    if (nextStatus === 2) {
-      let result = await reqDelectWo(wo._id);
-      if (result.status === 0) {
-        message.success('订单已经被拒绝')
-        this.getWos(1)
-      }
+    let result = await reqUpdateWoStatus(wo._id, nextStatus, this.props.user._id);
+    if (result.status === 0) {
+      message.success('接单成功');
+      this.getServiceWos(1);
     } else {
-      let result = await reqUpdateWoStatus(wo._id, nextStatus);
-      if (result.status === 0) {
-        message.success('订单状态更新成功');
-        this.getWos(1)
-      } else {
-        message.error(result.msg);
-      }
+      message.error(result.msg);
     }
   }
 
@@ -143,7 +112,7 @@ class serviceSquare extends Component {
   /*
   获取指定页码的列表数据显示
    */
-  getWos = async (pageNum) => {
+  getServiceWos = async (pageNum) => {
     this.pageNum = pageNum // 保存pageNum, 让其它方法可以看到
     this.setState({ loading: true }) // 显示loading
 
@@ -151,9 +120,9 @@ class serviceSquare extends Component {
     // 如果搜索关键字有值, 说明我们要做搜索分页
     let result
     if (searchName) {
-      result = await reqSearchWos({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
+      result = await reqSearchServiceWos({ pageNum, pageSize: PAGE_SIZE, searchName, searchType })
     } else { // 一般分页请求
-      result = await reqAllWo(pageNum, PAGE_SIZE, this.props.user._id)
+      result = await reqServiceWos(pageNum, PAGE_SIZE, this.props.user._id)
     }
 
     this.setState({ loading: false }) // 隐藏loading
@@ -175,7 +144,7 @@ class serviceSquare extends Component {
 
   componentDidMount() {
 
-    this.getWos(1)
+    this.getServiceWos(1)
   }
 
   render() {
@@ -191,8 +160,8 @@ class serviceSquare extends Component {
           style={{ width: 150 }}
           onChange={value => this.setState({ searchType: value })}
         >
-          <Option value='woId'>按单号搜索</Option>
-          <Option value='woDesc'>按描述搜索</Option>
+          <Option value='address'>按服务地址搜索</Option>
+          <Option value='serviceName'>按服务类型搜索</Option>
         </Select>
         <Input
           placeholder='关键字'
@@ -200,7 +169,7 @@ class serviceSquare extends Component {
           value={searchName}
           onChange={event => this.setState({ searchName: event.target.value })}
         />
-        <Button type='primary' onClick={() => this.getWos(1)}>搜索</Button>
+        <Button type='primary' onClick={() => this.getServiceWos(1)}>搜索</Button>
       </span>
     )
 
@@ -219,7 +188,7 @@ class serviceSquare extends Component {
             total,
             defaultPageSize: PAGE_SIZE,
             showQuickJumper: true,
-            onChange: this.getWos
+            onChange: this.getServiceWos
           }}
         />
       </Card>

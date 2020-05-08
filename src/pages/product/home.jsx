@@ -74,7 +74,7 @@ class ProductHome extends Component {
             </span>
           )
         }
-      },
+      }
 
     ];
     if (this.props.userAuth) {
@@ -97,9 +97,9 @@ class ProductHome extends Component {
     if (wo.deadline < Date.now()) return <><Button type="primary" disabled>订单已过期</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={() => this.changeWoStatus(wo, 2)} type="primary">删除订单</Button></>
     switch (wo.status) {
       case 0: return <><Button type="primary" onClick={() => this.changeWoStatus(wo, 2)}>拒绝订单</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={() => this.changeWoStatus(wo, 1)} type="primary">接收订单</Button></>
-      case 1: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 3)} disabled={!this.props.userAuth}>订单派送中</Button>
+      case 1: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 3)} >订单派送中</Button>
       case 2: return <Button type="primary" disabled>订单已被拒绝</Button>
-      case 3: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 4)}>进行订单服务</Button>
+      case 3: return <Button type="primary" onClick={() => this.changeWoStatus(wo, 4)}>订单服务进行中</Button>
       default: return <Button type="primary" disabled>订单已完成</Button>
     }
   }

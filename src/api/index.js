@@ -51,11 +51,11 @@ export const reqDelectWo = (woId) => ajax('/manage/wo/delete', { woId }, 'POST')
 
 export const reqWo = _id => ajax('/manage/wo/one', { _id });
 
-export const reqServiceWo = () => ajax('/manage/wo/serviceWo')
+export const reqServiceWos = (pageNum, pageSize) => ajax('/manage/wo/serviceWo', { pageNum, pageSize })
 
 export const reqWoList = parentIds => ajax('/manage/wo/count', { parentIds });
 
-export const reqUpdateWoStatus = (woId, status) => ajax('/manage/wo/updateStatus', { woId, status }, 'POST')
+export const reqUpdateWoStatus = (woId, status, serviceStaffId) => ajax('/manage/wo/updateStatus', { woId, status, serviceStaffId }, 'POST')
 
 export const reqDeleteImg = (name) => ajax('/manage/img/delete', { name }, 'POST')
 
@@ -64,6 +64,14 @@ export const reqSearchWos = ({ pageNum, pageSize, searchName, searchType }) => a
     pageSize,
     [searchType]: searchName,
 })
+
+export const reqSearchServiceWos = ({ pageNum, pageSize, searchName, searchType }) =>
+    ajax('/manage/wo/searchServiceWo', {
+        pageNum,
+        pageSize,
+        [searchType]: searchName,
+    })
+
 
 export const reqCategory = categoryId => ajax('/manage/category/info', { categoryId });
 
@@ -82,4 +90,3 @@ export const reqDeleteUser = (userId) => ajax('/manage/user/delete', { userId },
 export const reqAddOrUpdateUser = (user) => ajax('/manage/user/' + (user._id ? 'update' : 'add'), user, 'POST');
 
 export const reqUserRole = (roleId) => ajax('/manage/user/auth', { roleId });
-
