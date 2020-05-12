@@ -39,7 +39,7 @@ class Admin extends Component {
                             <Redirect to='/home'></Redirect>
                         </Switch>
                     </Content>
-                    <Footer style={{ textAlign: 'center', color: '#cccc' }}>底部</Footer>
+                    <Footer style={{ textAlign: 'center', color: '#cccc' }}>用心服务，安心到家</Footer>
                 </Layout>
             </Layout>
         </>

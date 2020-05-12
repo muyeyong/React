@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, Button } from 'antd'
 import ReactEcharts from 'echarts-for-react'
-import { reqCategory, reqWoList } from '../../api';
+import { reqCategory, reqWoCount } from '../../api';
 
 /*
 后台管理的折线图路由组件
@@ -23,7 +23,7 @@ export default class Line extends Component {
             let categorys = result.data;
             let categorysId = categorys.map(item => item._id);
 
-            let wosNumber = await reqWoList(categorysId);
+            let wosNumber = await reqWoCount(categorysId);
 
         }
     }

@@ -107,7 +107,6 @@ export class leftNav extends Component {
             <>
                 <div className='left-nva'>
                     <Link to={'/'} className='left-nva-header'>
-                        <img src={Logo} alt='log' />
                         <h1>家政管理平台</h1>
                     </Link>
                 </div>

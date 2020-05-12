@@ -25,9 +25,8 @@ class Login extends Component {
         if (user && user._id) return <Redirect to='/'></Redirect>;
         return <>
             <div className="login">
-                <header className="login-header">u
-                    <img src={logo} alt="logo" />
-                    <h1>React：后台管理系统</h1>
+                <header className="login-header">
+                    <h1>家政服务平台</h1>
                 </header>
                 <section className="login-content">
                     <h2>用户登录</h2>

@@ -53,7 +53,7 @@ export const reqWo = _id => ajax('/manage/wo/one', { _id });
 
 export const reqServiceWos = (pageNum, pageSize) => ajax('/manage/wo/serviceWo', { pageNum, pageSize })
 
-export const reqWoList = parentIds => ajax('/manage/wo/count', { parentIds });
+export const reqWoCount = (parentIds, roleId, userId) => ajax('/manage/wo/count', { parentIds, roleId, userId });
 
 export const reqUpdateWoStatus = (woId, status, serviceStaffId) => ajax('/manage/wo/updateStatus', { woId, status, serviceStaffId }, 'POST')
 
@@ -64,6 +64,8 @@ export const reqSearchWos = ({ pageNum, pageSize, searchName, searchType }) => a
     pageSize,
     [searchType]: searchName,
 })
+
+export const reqWoMonthData = (roleId, userId) => ajax('/manage/wo/monthData', { roleId, userId })
 
 export const reqSearchServiceWos = ({ pageNum, pageSize, searchName, searchType }) =>
     ajax('/manage/wo/searchServiceWo', {

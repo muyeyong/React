@@ -130,7 +130,7 @@ class ProductAddUpdate extends PureComponent {
     this.form.current.validateFields().then(async (values) => {
       const { woId, categoryIds, time, address } = values;
       const userId = this.props.user._id;
-      const createDate = time[0].format('x');
+      const createDate = time[0].format('x');//转化成了毫秒时间戳
       const deadline = time[1].format('x');
       const parentId = categoryIds[0];
       const selfId = categoryIds[1];

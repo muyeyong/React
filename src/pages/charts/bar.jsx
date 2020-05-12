@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import { Card, Button } from 'antd';
 import ReactEcharts from 'echarts-for-react';
-import { reqCategorys, reqWoList } from '../../api';
-
+import { reqCategorys, reqWoCount } from '../../api';
+import { connect } from 'react-redux';
 /*
 后台管理的柱状图路由组件
  */
-export default class Bar extends Component {
+class Bar extends Component {
 
     state = {
         categorys: [],
         wosNamber: []
     }
-
 
     componentDidMount() {
 
@@ -25,7 +24,7 @@ export default class Bar extends Component {
             let categorys = result.data;
             let categorysId = categorys && categorys.map(item => item._id);
             let categorysName = categorys && categorys.map(item => item.name)
-            result = await reqWoList(JSON.stringify(categorysId));
+            result = await reqWoCount(JSON.stringify(categorysId), this.props.user.role_id, this.props.user._id);
             if (result.status === 0) {
                 let wosNumber = result.data;
                 this.setState({
@@ -81,3 +80,5 @@ export default class Bar extends Component {
         )
     }
 }
+
+export default connect(state => ({ user: state.user }))(Bar); 
