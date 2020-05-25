@@ -9,7 +9,6 @@ import { menuList } from '../../config/menuConfig'
 
 const Item = Form.Item
 
-const { TreeNode } = Tree;
 
 /*
 添加分类的form组件
@@ -36,16 +35,7 @@ export default class AuthForm extends PureComponent {
   getMenus = () => this.state.checkedKeys
 
 
-  // getTreeNodes = (menuList) => {
-  //   return menuList.reduce((pre, item) => {
-  //     pre.push(
-  //       <TreeNode title={item.title} key={item.key}>
-  //         {item.children ? this.getTreeNodes(item.children) : null}
-  //       </TreeNode>
-  //     )
-  //     return pre
-  //   }, [])
-  // }
+
 
   // 选中某个node时的回调
   onCheck = checkedKeys => {

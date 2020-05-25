@@ -123,7 +123,7 @@ class ProductHome extends Component {
   }
 
   /*
-显示商品详情界面
+显示WO详情界面
   */
   showDetail = (wo) => {
     // 缓存product对象 ==> 给detail组件使用

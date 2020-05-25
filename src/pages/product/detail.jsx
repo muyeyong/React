@@ -6,7 +6,7 @@ import {
 
 import LinkButton from '../../components/link-button'
 import { BASE_IMG_URL } from '../../utils/constants'
-import { reqCategory, reqWo } from '../../api'
+import {  reqWo } from '../../api'
 import memoryUtils from "../../utils/memoryUtils";
 import woUtils from '../../utils/woUtils';
 import { RollbackOutlined } from '@ant-design/icons';

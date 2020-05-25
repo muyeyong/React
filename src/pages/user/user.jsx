@@ -114,7 +114,6 @@ export default class User extends Component {
 
         // 1. 收集输入数据
 
-        // console.log(this.form)
         this.form.validateFields().then(async value => {
             this.setState({ isShow: false })
             const { password, username, phone, email, role_id } = value;

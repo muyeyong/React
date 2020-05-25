@@ -27,7 +27,7 @@ class UpdateForm extends Component {
 
   render() {
 
-    const {categoryName,parentId} = this.props
+    const {parentId} = this.props
     
     return (
       <>

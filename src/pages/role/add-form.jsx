@@ -32,10 +32,7 @@ class AddForm extends Component {
     return (
       <Form ref={this.fromRef}>
         <Item label='角色名称' name='roleName' {...formItemLayout} rules={[{ required: true, message: '角色名称必须输入' }]}>
-
           <Input placeholder='请输入角色名称' />
-
-
         </Item>
       </Form>
     )

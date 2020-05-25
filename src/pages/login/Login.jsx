@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import './login.less';
-import logo from '../../assets/imags/logo.png';
-import { Form, Input, Button, Checkbox, message } from 'antd';
+import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { reqLogin } from '../../api';
-import storageUtils from '../../utils/storageUtils';
-import memoryUtils from '../../utils/memoryUtils';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login, getUserAuth } from '../../redux/actions';
@@ -15,7 +11,6 @@ class Login extends Component {
 
     handleSubmit = async value => {
         this.props.login(value.username, value.password);
-
     }
 
 

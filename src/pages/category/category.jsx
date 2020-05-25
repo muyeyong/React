@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Table, Card, message, Modal, Form, Select, Input } from 'antd';
 import LinkButton from '../../components/link-button';
-import { reqCategorys, reqAddCategory, reqUpdateCategory, reqCategoryInfo } from '../../api/index';
+import { reqCategorys, reqAddCategory, reqUpdateCategory} from '../../api/index';
 import AddForm from './add-form';
 import UpdateForm from './update-form';
 import { ArrowRightOutlined } from '@ant-design/icons';

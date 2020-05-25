@@ -49,7 +49,6 @@ class Home extends Component {
                     className="home-card"
                     title="订单总数"
                     extra={<Icon style={{ color: 'rgba(0,0,0,.45)' }} type="question-circle" />}
-                    // style={{ width: 250 }}
                     headStyle={{ color: 'rgba(0,0,0,.45)' }}
                 >
                     <Statistic
