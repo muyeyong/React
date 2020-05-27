@@ -48,7 +48,7 @@ class ProductAddUpdate extends PureComponent {
       isLeaf: false, // 不是叶子
     }))
 
-    // 如果是一个二级分类商品的更新
+    // 如果是一个二级分类wo的更新
     const { isUpdate, wo } = this
     const { pCategoryId } = wo
     if (pCategoryId && isUpdate && pCategoryId !== '0') {
@@ -61,7 +61,7 @@ class ProductAddUpdate extends PureComponent {
         isLeaf: true
       }))
 
-      // 找到当前商品对应的一级option对象
+      // 找到当前wo对应的一级option对象
       const targetOption = options.find(option => option.value === pCategoryId)
 
       // 关联对应的一级option上
@@ -182,7 +182,7 @@ class ProductAddUpdate extends PureComponent {
     const wo = memoryUtils.wo  // 如果是添加没值, 否则有值
     // 保存是否是更新的标识
     this.isUpdate = !!wo._id
-    // 保存商品(如果没有, 保存是{})
+    // 保存wo(如果没有, 保存是{})
     this.wo = wo || {}
   }
 
@@ -201,11 +201,11 @@ class ProductAddUpdate extends PureComponent {
     // 用来接收级联分类ID的数组
     const categoryIds = []
     if (isUpdate) {
-      // 商品是一个一级分类的商品
+      // wo是一个一级分类的wo
       if (pCategoryId === '0') {
         categoryIds.push(categoryId)
       } else {
-        // 商品是一个二级分类的商品
+        // wo是一个二级分类的wo
         categoryIds.push(pCategoryId)
         categoryIds.push(categoryId)
       }
@@ -244,7 +244,7 @@ class ProductAddUpdate extends PureComponent {
           <Item label="订单分类" name="categoryIds" rules={[{ required: true, message: '请选择订单分类' }]}>
 
             <Cascader
-              placeholder='请指定商品分类'
+              placeholder='请指定wo分类'
               options={this.state.options}  /*需要显示的列表数据数组*/
               loadData={this.loadData} /*当选择某个列表项, 加载下一级列表的监听回调*/
               onChange={this.onChange}

@@ -22,8 +22,8 @@ const Option = Select.Option
 class ProductHome extends Component {
 
   state = {
-    total: 0, // 商品的总数量
-    wos: [], // 商品的数组
+    total: 0, // wo的总数量
+    wos: [], // wo的数组
     loading: false, // 是否正在加载中
     searchName: '', // 搜索的关键字
     searchType: 'woId', // 根据哪个字段搜索
@@ -75,7 +75,6 @@ class ProductHome extends Component {
           )
         }
       }
-
     ];
     if (this.props.userAuth) {
       this.columns.push({
@@ -132,7 +131,7 @@ class ProductHome extends Component {
   }
 
 
-  // 显示修改商品界面
+  // 显示修改wo界面
 
   showUpdate = (wo) => {
     // 缓存product对象 ==> 给detail组件使用

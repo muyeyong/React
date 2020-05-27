@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import './header.less';
 import { formateDate } from '../../utils/dateUtils';
 import { reqWeather } from '../../api/index';
-import memoryUtils from '../../utils/memoryUtils';
 import { withRouter } from 'react-router-dom';
 import { menuList } from '../../config/menuConfig'
 import LinkButton from '../link-button';
 import { Modal } from 'antd';
-import storageUtils from '../../utils/storageUtils';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { connect } from 'react-redux';
 import { logout } from '../../redux/actions';

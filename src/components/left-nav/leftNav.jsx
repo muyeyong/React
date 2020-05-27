@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import Logo from '../../assets/imags/logo.png';
 import { Link, withRouter } from 'react-router-dom';
 import './leftNav.less';
-import { findIndex, find, indexOf } from 'lodash';
+import {  find, indexOf } from 'lodash';
 import { Menu } from 'antd';
 import {
     HomeOutlined,
@@ -17,7 +16,6 @@ import {
     InsuranceOutlined,
     RedEnvelopeOutlined
 } from '@ant-design/icons';
-import Line from '../../pages/charts/line';
 import { connect } from 'react-redux';
 import { menuList } from '../../config/menuConfig';
 const { SubMenu } = Menu;

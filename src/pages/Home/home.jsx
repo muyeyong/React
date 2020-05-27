@@ -37,7 +37,7 @@ class Home extends Component {
         return () => this.setState({ isVisited })
     }
     componentDidMount() {
-        const { getUserAuth, user: { role_id }, user } = this.props;
+        const { getUserAuth, user: { role_id }} = this.props;
         getUserAuth(role_id);
         this.getData();
     }

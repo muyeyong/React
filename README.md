@@ -11,11 +11,11 @@
 	7). 添加分类
 	8). 更新品类名称
 	9). 根据分类ID获取分类
-	10). 获取商品分页列表
+	10). 获取wo分页列表
 	11). 根据ID/Name搜索产品分页列表
-	12). 添加商品
-	13). 更新商品
-	14). 对商品进行上架/下架处理
+	12). 添加wo
+	13). 更新wo
+	14). 对wo进行上架/下架处理
 	15). 上传图片
 	16). 删除图片
 	17). 添加角色
@@ -527,7 +527,7 @@
     |parentId      |Y       |string   |一级分类Id
     |selfId        |Y       |string   |二级分类Id
     |cost          |Y       |Number   |订单价格
-    |imgs          |N       |array   |商品图片名数组
+    |imgs          |N       |array   |wo图片名数组
     |detail        |N       |string   |订单细节
     |address       |Y       |string   |订单地址
 
@@ -578,7 +578,7 @@
       "status": 0
     }
 
-## 14. 对商品进行上架/下架处理   //没有使用
+## 14. 对wo进行上架/下架处理   //没有使用
 
 ### 请求URL：
 
@@ -591,8 +591,8 @@
 ### 参数类型:
 
     |参数		      |是否必选 |类型     |说明
-    |productId    |Y       |string   |商品名称
-    |status       |Y       |number   |商品状态值
+    |productId    |Y       |string   |wo名称
+    |status       |Y       |number   |wo状态值
 
 ### 返回示例：
 

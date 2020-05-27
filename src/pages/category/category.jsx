@@ -6,8 +6,6 @@ import AddForm from './add-form';
 import UpdateForm from './update-form';
 import { ArrowRightOutlined } from '@ant-design/icons';
 
-const Item = Form.Item
-const Option = Select.Option
 
 class Category extends Component {
 
